@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="ECHL player analytics with position-specific benchmarks, percentile profiles, and searchable player reports.">
   <title>ECHL Player Analytics</title>
-  <link rel="stylesheet" href="./style.css?v=4">
+  <link rel="stylesheet" href="./style.css?v=9">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
@@ -45,12 +45,12 @@
         <h2 id="playerName">Loading…</h2>
         <p id="playerMeta" class="sub"></p>
       </div>
-      <div class="stats">
+      <div class="stats season-stats">
         <div><span>GP</span><strong id="gp">—</strong></div>
-        <div><span>TOI/GP</span><strong id="toi">—</strong></div>
-        <div><span>CF%</span><strong id="cf">—</strong></div>
-        <div><span>FF%</span><strong id="ff">—</strong></div>
-        <div><span>xGF%</span><strong id="xgf">—</strong></div>
+        <div><span>PTS</span><strong id="pts">—</strong></div>
+        <div><span>G</span><strong id="goals">—</strong></div>
+        <div><span>A</span><strong id="assists">—</strong></div>
+        <div><span>PIM</span><strong id="pim">—</strong></div>
       </div>
     </section>
 
@@ -92,6 +92,6 @@
 
     <footer><span>© 2026 Kyle Neuber</span><span>Data sourced from InStat</span></footer>
   </main>
-  <script src="./app.js?v=4"></script>
+  <script src="./app.js?v=9"></script>
 </body>
 </html>

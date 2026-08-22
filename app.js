@@ -5,6 +5,52 @@ const clean=v => (v===undefined||v===null) ? "" : String(v).trim();
 const num=v => { const n=parseFloat(clean(v).replace("%","")); return Number.isFinite(n)?n:null; };
 const isPctMetric=m => /%$/.test(clean(m)) || ["CORSI For %","Fenwick For %","xG For %","Faceoff Win %","Accurate Passes %","Puck Battles Won %","DZ Puck Losses"].includes(clean(m));
 const CATEGORY_ORDER=["Offense","Possession","Puck Management","Discipline","Skill","Role / Context","Role"];
+const METRIC_ORDER={
+  "Offense":[
+    "Goals",
+    "Expected Goals",
+    "First Assists",
+    "Second Assists",
+    "Points",
+    "Scoring Chances",
+    "xG per Shot",
+    "Shots on Goal",
+    "Passes to Slot",
+    "Pre-Shot Passes",
+    "Assists",
+    "Plus/Minus"
+  ],
+  "Possession":[
+    "CORSI For %",
+    "Fenwick For %",
+    "xG For %",
+    "CORSI"
+  ],
+  "Puck Management":[
+    "Puck Losses",
+    "DZ Puck Losses",
+    "Accurate Passes %",
+    "Puck Battles Won %",
+    "Loose Puck Recovery"
+  ],
+  "Discipline":[
+    "Penalty Differential",
+    "Penalties Drawn"
+  ],
+  "Skill":[
+    "Faceoff Win %"
+  ],
+  "Role / Context":[
+    "TOI",
+    "Puck Control Time",
+    "Hits"
+  ],
+  "Role":[
+    "TOI",
+    "Puck Control Time",
+    "Hits"
+  ]
+};
 const CHART_METRICS=["CORSI For %","Fenwick For %","xG For %","Puck Losses","DZ Puck Losses","Accurate Passes %","Puck Battles Won %","Faceoff Win %"];
 
 function field(row,names){for(const n of names){if(Object.prototype.hasOwnProperty.call(row,n)) return row[n];}return "";}
@@ -23,7 +69,17 @@ function sortRows(rows){
     const ca=clean(field(a,["Category"])), cb=clean(field(b,["Category"]));
     const ia=CATEGORY_ORDER.indexOf(ca), ib=CATEGORY_ORDER.indexOf(cb);
     const ra=ia===-1?999:ia, rb=ib===-1?999:ib;
-    return ra!==rb?ra-rb:clean(field(a,["Metric"])).localeCompare(clean(field(b,["Metric"])));
+
+    if(ra!==rb) return ra-rb;
+
+    const ma=clean(field(a,["Metric"]));
+    const mb=clean(field(b,["Metric"]));
+    const order=METRIC_ORDER[ca] || [];
+    const mia=order.indexOf(ma), mib=order.indexOf(mb);
+    const mra=mia===-1?999:mia, mrb=mib===-1?999:mib;
+
+    if(mra!==mrb) return mra-mrb;
+    return ma.localeCompare(mb);
   });
 }
 function render(){
@@ -32,9 +88,11 @@ function render(){
   const first=rows[0];
   $("playerName").textContent=player;
   $("playerMeta").textContent=`${clean(field(first,["Position"]))} · ${clean(field(first,["Team"]))}`;
-  $("gp").textContent=clean(field(first,["Games played","Games Played"]))||"—";
-  const setStat=(id,name)=>{const r=metric(rows,name);$(id).textContent=r?fmt(field(r,["Player Value","Per-game value"]),name):"—";};
-  setStat("toi","TOI");setStat("cf","CORSI For %");setStat("ff","Fenwick For %");setStat("xgf","xG For %");
+  $("gp").textContent=clean(field(first,["Season GP","Games played","Games Played"]))||"—";
+  $("pts").textContent=clean(field(first,["Season Points"]))||"0";
+  $("goals").textContent=clean(field(first,["Season Goals"]))||"0";
+  $("assists").textContent=clean(field(first,["Season Assists"]))||"0";
+  $("pim").textContent=clean(field(first,["Season PIM"]))||"0";
 
   const body=$("metrics");body.innerHTML="";let previousCategory=null;
   sortRows(rows).forEach(r=>{
@@ -80,7 +138,7 @@ $("player").addEventListener("input",()=>{if([...$("players").options].some(o=>o
 if(typeof Papa==="undefined"){
   $("playerName").textContent="Could not load analytics library";
 }else{
-  Papa.parse("./ECHL_Player_Analytics.csv?v=4",{
+  Papa.parse("./ECHL_Player_Analytics.csv?v=9",{
     download:true,header:true,dynamicTyping:false,skipEmptyLines:true,
     complete:r=>{DATA=r.data;populate();},
     error:e=>{

@@ -280,3 +280,14 @@ img{max-width:100%}.about-copy p{overflow-wrap:anywhere}
     line-height:1.34;
   }
 }
+
+/* v8 — traditional season stats */
+.season-stats strong{font-variant-numeric:tabular-nums}.season-stats div{min-width:86px}
+
+/* v9 — ordered report + quick profile polish */
+.season-stats{
+  align-items:stretch;
+}
+.season-stats div{
+  text-align:center;
+}
