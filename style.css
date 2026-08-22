@@ -398,8 +398,8 @@ img{max-width:100%}.about-copy p{overflow-wrap:anywhere}
 
 /* v14 — percentile performance colors */
 .percentile-card-box.below-midpoint{
-  background:#7b3138;
-  border-color:#a9575e;
+  background:#8a4650;
+  border-color:#a65a64;
 }
 .percentile-card-box.at-or-above-midpoint{
   background:#1d5d8d;
