@@ -341,3 +341,57 @@ img{max-width:100%}.about-copy p{overflow-wrap:anywhere}
   .percentile-grid{grid-template-columns:repeat(2,1fr);gap:12px}
   .percentile-card-label{font-size:13px}
 }
+
+/* v12 — force square percentile card layout */
+#profileChart,.chart-wrap{display:none!important}
+.percentile-grid{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(120px,1fr));
+  gap:18px;
+  padding:20px 4px 12px;
+}
+.percentile-card{text-align:center}
+.percentile-card-label{
+  min-height:38px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  padding-bottom:9px;
+  font-size:15px;
+  font-weight:800;
+  color:#dbe6f4;
+}
+.percentile-card-box{
+  width:min(100%,150px);
+  aspect-ratio:1/1;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:10px;
+  background:#1d5d8d;
+  border:1px solid #3b6d95;
+  color:#fff;
+  font-size:46px;
+  font-weight:900;
+}
+@media(max-width:900px){.percentile-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.percentile-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* v13 — seven-metric player impact snapshot */
+.percentile-grid{
+  grid-template-columns:repeat(7,minmax(105px,1fr))!important;
+  gap:14px!important;
+}
+.percentile-card-box{
+  max-width:135px;
+}
+.percentile-card-label{
+  font-size:14px;
+}
+@media(max-width:1100px){
+  .percentile-grid{grid-template-columns:repeat(4,1fr)!important}
+}
+@media(max-width:760px){
+  .percentile-grid{grid-template-columns:repeat(2,1fr)!important}
+}
