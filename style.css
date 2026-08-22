@@ -291,3 +291,7 @@ img{max-width:100%}.about-copy p{overflow-wrap:anywhere}
 .season-stats div{
   text-align:center;
 }
+
+/* v10 — five-metric percentile snapshot */
+.chart-wrap{height:330px}
+@media(max-width:760px){.chart-wrap{height:380px}}

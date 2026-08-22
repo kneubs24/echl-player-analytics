@@ -51,7 +51,7 @@ const METRIC_ORDER={
     "Hits"
   ]
 };
-const CHART_METRICS=["CORSI For %","Fenwick For %","xG For %","Puck Losses","DZ Puck Losses","Accurate Passes %","Puck Battles Won %","Faceoff Win %"];
+const CHART_METRICS=["Goals","Assists","Points","TOI","Hits"];
 
 function field(row,names){for(const n of names){if(Object.prototype.hasOwnProperty.call(row,n)) return row[n];}return "";}
 function fmt(v,metric,percentile=false){
@@ -138,7 +138,7 @@ $("player").addEventListener("input",()=>{if([...$("players").options].some(o=>o
 if(typeof Papa==="undefined"){
   $("playerName").textContent="Could not load analytics library";
 }else{
-  Papa.parse("./ECHL_Player_Analytics.csv?v=9",{
+  Papa.parse("./ECHL_Player_Analytics.csv?v=10",{
     download:true,header:true,dynamicTyping:false,skipEmptyLines:true,
     complete:r=>{DATA=r.data;populate();},
     error:e=>{
