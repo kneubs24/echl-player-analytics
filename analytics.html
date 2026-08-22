@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="ECHL player analytics with position-specific benchmarks, percentile profiles, and searchable player reports.">
+  <title>ECHL Player Analytics</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+  <main class="wrap analytics-wrap">
+    <header class="site-header compact">
+      <a class="brand" href="index.html">ECHL <span>PLAYER ANALYTICS</span></a>
+      <nav class="top-nav">
+        <a href="index.html">About Me</a>
+        <a class="active" href="analytics.html">Analytics</a>
+      </nav>
+    </header>
+
+    <section class="page-title">
+      <div>
+        <p class="eyebrow">PLAYER COMPARISON DATABASE</p>
+        <h1>ECHL Player Analytics</h1>
+        <p class="sub">Performance vs. ECHL players · Minimum 10 GP · Position-specific benchmarks</p>
+      </div>
+      <a class="back-link" href="index.html">← Back to About</a>
+    </section>
+
+    <section class="controls card" id="analytics">
+      <label>Season
+        <select id="season"></select>
+      </label>
+      <label class="player-search">Player
+        <input id="player" list="players" placeholder="Search player" autocomplete="off">
+        <datalist id="players"></datalist>
+      </label>
+    </section>
+
+    <section class="hero card">
+      <div>
+        <p class="eyebrow">QUICK PROFILE</p>
+        <h2 id="playerName">Loading…</h2>
+        <p id="playerMeta" class="sub"></p>
+      </div>
+      <div class="stats">
+        <div><span>GP</span><strong id="gp">—</strong></div>
+        <div><span>TOI/GP</span><strong id="toi">—</strong></div>
+        <div><span>CF%</span><strong id="cf">—</strong></div>
+        <div><span>FF%</span><strong id="ff">—</strong></div>
+        <div><span>xGF%</span><strong id="xgf">—</strong></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <div><p class="eyebrow">PERCENTILE SNAPSHOT</p><h3>Quick player profile</h3></div>
+        <span class="note">50th percentile = positional midpoint</span>
+      </div>
+      <div class="chart-wrap"><canvas id="profileChart"></canvas></div>
+      <p class="chart-note">Percentiles are season- and position-specific. Lower-is-better metrics such as puck losses are inverted so a higher percentile is always better.</p>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <div><p class="eyebrow">FULL REPORT</p><h3>Player analytics</h3></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Category</th><th>Metric</th><th>Per-game value</th><th>ECHL Avg</th><th>Percentile</th>
+            </tr>
+          </thead>
+          <tbody id="metrics"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card info-grid" id="methodology">
+      <div>
+        <p class="eyebrow">METHODOLOGY</p>
+        <h3>How to read the data</h3>
+      </div>
+      <div class="info-copy">
+        <p><strong>Minimum sample:</strong> Players must have at least 10 games played in the selected season.</p>
+        <p><strong>Position-specific benchmarks:</strong> Forwards are compared with forwards and defensemen are compared with defensemen.</p>
+        <p><strong>Per-game values:</strong> Counting metrics are shown as per-game rates so players with different games played can be compared more fairly.</p>
+        <p><strong>Percentiles:</strong> Higher percentiles always indicate stronger results. Lower-is-better metrics such as puck losses are inverted before ranking.</p>
+        <p><strong>Faceoffs:</strong> Faceoff Win % appears only when the player meets the minimum faceoff sample.</p>
+        <p><strong>Data source:</strong> InStat / ECHL player-tracking data used for this project.</p>
+      </div>
+    </section>
+
+    <footer>
+      <span>© 2026 Kyle Neuber</span>
+      <span>Data sourced from InStat</span>
+    </footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

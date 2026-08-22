@@ -3,121 +3,47 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="ECHL player analytics with position-specific benchmarks, percentile profiles, and searchable player reports.">
-  <title>ECHL Player Analytics</title>
+  <meta name="description" content="Kyle Neuber — professional hockey player, leader, MBA graduate, and hockey analytics portfolio.">
+  <title>Kyle Neuber | Hockey Analytics</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0"></script>
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
-<body>
-  <main class="wrap">
-    <header class="site-header">
-      <div>
-        <p class="eyebrow">PLAYER COMPARISON DATABASE</p>
-        <h1>ECHL Player Analytics</h1>
-        <p class="sub">Performance vs. ECHL players · Minimum 10 GP · Position-specific benchmarks</p>
-      </div>
-      <nav class="top-nav" aria-label="Primary">
-        <a href="#analytics">Analytics</a>
-        <a href="#methodology">Methodology</a>
-        <a href="#about">About</a>
-      </nav>
-    </header>
+<body class="home-body">
+  <header class="home-nav">
+    <a class="brand" href="index.html">ECHL <span>PLAYER ANALYTICS</span></a>
+    <nav class="top-nav">
+      <a class="active" href="index.html">About Me</a>
+      <a href="analytics.html">Analytics</a>
+    </nav>
+  </header>
 
-    <section class="controls card" id="analytics">
-      <label>Season
-        <select id="season"></select>
-      </label>
-      <label class="player-search">Player
-        <input id="player" list="players" placeholder="Search player" autocomplete="off">
-        <datalist id="players"></datalist>
-      </label>
-    </section>
+  <main class="about-hero">
+    <section class="about-copy">
+      <h1>Kyle Neuber</h1>
+      <p class="motto">Big dogs eat, Lil Crying puppies stay on the porch</p>
+      <div class="accent-rule"></div>
 
-    <section class="hero card">
-      <div>
-        <p class="eyebrow">PLAYER PROFILE</p>
-        <h2 id="playerName">Loading…</h2>
-        <p id="playerMeta" class="sub"></p>
-      </div>
-      <div class="stats">
-        <div><span>GP</span><strong id="gp">—</strong></div>
-        <div><span>TOI/GP</span><strong id="toi">—</strong></div>
-        <div><span>CF%</span><strong id="cf">—</strong></div>
-        <div><span>FF%</span><strong id="ff">—</strong></div>
-        <div><span>xGF%</span><strong id="xgf">—</strong></div>
-      </div>
-    </section>
+      <p>As a twelve-year professional hockey player, five-time Kelly Cup champion, and six-year PHPA player representative, I bring a unique combination of high-level playing experience, administrative capability, and leadership skills.</p>
 
-    <section class="card">
-      <div class="section-head">
+      <p>I recently earned my Master of Business Administration while playing professional hockey so I can integrate advanced organizational skills and analytics into operational support, ensuring a seamless and professional approach to team success. I also had academic success, earning an A- average in my Master's program.</p>
+
+      <p>During my time as a professional hockey player, I learned how to win and did so: five Kelly Cup Championships, two Kelly Cup Finalists, and a Calder Cup Finalist.</p>
+
+      <div class="winning-block">
+        <div class="trophy-icon">🏆</div>
         <div>
-          <p class="eyebrow">QUICK PROFILE</p>
-          <h3>Percentile snapshot</h3>
-        </div>
-        <span class="note">50th percentile = positional midpoint</span>
-      </div>
-      <div class="chart-wrap"><canvas id="profileChart"></canvas></div>
-      <p class="chart-note">Percentiles are season- and position-specific. Lower-is-better metrics such as puck losses are inverted so a higher percentile is always better.</p>
-    </section>
-
-    <section class="card">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">FULL REPORT</p>
-          <h3>Player analytics</h3>
+          <h2>Winning is a choice.</h2>
+          <p>That choice is reflected in our actions, and our actions are the sum of our culture. Winning doesn't happen by accident—it comes from daily behaviours, and those behaviours are driven by the team's culture.</p>
         </div>
       </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Category</th>
-              <th>Metric</th>
-              <th>Per-game value</th>
-              <th>ECHL Avg</th>
-              <th>Percentile</th>
-            </tr>
-          </thead>
-          <tbody id="metrics"></tbody>
-        </table>
-      </div>
+
+      <blockquote>I attack each day with my love for the game and the idea that we get better every day.</blockquote>
+
+      <a class="cta" href="analytics.html">VIEW ECHL PLAYER ANALYTICS <span>→</span></a>
     </section>
 
-    <section class="card info-grid" id="methodology">
-      <div>
-        <p class="eyebrow">METHODOLOGY</p>
-        <h3>How to read the data</h3>
-      </div>
-      <div class="info-copy">
-        <p><strong>Minimum sample:</strong> Players must have at least 10 games played in the selected season.</p>
-        <p><strong>Position-specific benchmarks:</strong> Forwards are compared with forwards and defensemen are compared with defensemen.</p>
-        <p><strong>Per-game values:</strong> Counting metrics are shown as per-game rates so players with different games played can be compared more fairly.</p>
-        <p><strong>Percentiles:</strong> Higher percentiles always indicate stronger results. Lower-is-better metrics such as puck losses are inverted before ranking.</p>
-        <p><strong>Faceoffs:</strong> Faceoff Win % is shown only when a player meets the minimum faceoff sample in the underlying model; otherwise it appears as N/A.</p>
-        <p><strong>Data source:</strong> Player-tracking data imported from the underlying ECHL/InStat dataset used to build this project.</p>
-      </div>
+    <section class="about-photo" aria-label="Kyle Neuber holding the Kelly Cup">
+      <img src="kyle-kelly-cup.jpg" alt="Kyle Neuber holding the Kelly Cup after a championship">
     </section>
-
-    <section class="card about-card" id="about">
-      <div>
-        <p class="eyebrow">ABOUT THE PROJECT</p>
-        <h3>Kyle Neuber — Hockey Analytics Portfolio</h3>
-        <p class="sub">A searchable player-comparison project built to explore ECHL skater performance through transparent, position-specific benchmarking.</p>
-      </div>
-      <div class="about-actions">
-        <button id="loadKyle" type="button">View Kyle Neuber</button>
-        <a href="#analytics">Explore players</a>
-      </div>
-    </section>
-
-    <footer>
-      <span>ECHL Player Analytics</span>
-      <span>Built by Kyle Neuber</span>
-    </footer>
   </main>
-
-  <script src="app.js"></script>
 </body>
 </html>
