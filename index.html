@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ECHL Player Analytics</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <div>
+        <p class="eyebrow">PLAYER COMPARISON DATABASE</p>
+        <h1>ECHL Player Analytics</h1>
+        <p class="sub">Performance vs. ECHL players · Minimum 10 GP · Position-specific benchmarks</p>
+      </div>
+    </header>
+
+    <section class="controls card">
+      <label>Season
+        <select id="season"></select>
+      </label>
+      <label class="player-search">Player
+        <input id="player" list="players" placeholder="Search player">
+        <datalist id="players"></datalist>
+      </label>
+    </section>
+
+    <section class="hero card">
+      <div>
+        <p class="eyebrow">PLAYER PROFILE</p>
+        <h2 id="playerName">Loading…</h2>
+        <p id="playerMeta" class="sub"></p>
+      </div>
+      <div class="stats">
+        <div><span>GP</span><strong id="gp">—</strong></div>
+        <div><span>TOI/GP</span><strong id="toi">—</strong></div>
+        <div><span>CF%</span><strong id="cf">—</strong></div>
+        <div><span>FF%</span><strong id="ff">—</strong></div>
+        <div><span>xGF%</span><strong id="xgf">—</strong></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <div><p class="eyebrow">QUICK PROFILE</p><h3>Percentile snapshot</h3></div>
+        <span class="note">50th percentile = positional median area</span>
+      </div>
+      <div class="chart-wrap"><canvas id="profileChart"></canvas></div>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <div><p class="eyebrow">FULL REPORT</p><h3>Player analytics</h3></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Category</th><th>Metric</th><th>Per-game value</th><th>ECHL Avg</th><th>Percentile</th></tr></thead>
+          <tbody id="metrics"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
