@@ -113,7 +113,7 @@ function render(){
   snapshot.innerHTML=chartRows.map(x=>`
     <div class="percentile-card">
       <div class="percentile-card-label">${x.label}</div>
-      <div class="percentile-card-box">${Math.round(x.value)}%</div>
+      <div class="percentile-card-box ${x.value<50?"below-midpoint":"at-or-above-midpoint"}">${Math.round(x.value)}%</div>
     </div>
   `).join("");
 }
@@ -192,7 +192,7 @@ $("player").addEventListener("input",()=>{
 if(typeof Papa==="undefined"){
   $("playerName").textContent="Could not load analytics library";
 }else{
-  Papa.parse("./ECHL_Player_Analytics.csv?v=13",{
+  Papa.parse("./ECHL_Player_Analytics.csv?v=14",{
     download:true,header:true,dynamicTyping:false,skipEmptyLines:true,
     complete:r=>{DATA=r.data;populate();},
     error:e=>{
