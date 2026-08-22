@@ -295,3 +295,49 @@ img{max-width:100%}.about-copy p{overflow-wrap:anywhere}
 /* v10 — five-metric percentile snapshot */
 .chart-wrap{height:330px}
 @media(max-width:760px){.chart-wrap{height:380px}}
+
+/* v11 — square percentile cards + global player search */
+.percentile-grid{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(120px,1fr));
+  gap:18px;
+  padding:18px 4px 10px;
+}
+.percentile-card{
+  min-width:0;
+  text-align:center;
+}
+.percentile-card-label{
+  min-height:42px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  padding:0 4px 9px;
+  color:#dbe6f4;
+  font-size:15px;
+  font-weight:700;
+}
+.percentile-card-box{
+  aspect-ratio:1/1;
+  max-width:155px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:9px;
+  border:1px solid #315476;
+  background:#1d5d8d;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.03);
+  color:#fff;
+  font-size:clamp(32px,3.2vw,52px);
+  font-weight:900;
+  letter-spacing:-1.5px;
+  font-variant-numeric:tabular-nums;
+}
+@media(max-width:900px){
+  .percentile-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:560px){
+  .percentile-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+  .percentile-card-label{font-size:13px}
+}

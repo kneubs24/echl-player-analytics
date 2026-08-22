@@ -1,5 +1,5 @@
 
-let DATA=[], chart;
+let DATA=[];
 const $=id=>document.getElementById(id);
 const clean=v => (v===undefined||v===null) ? "" : String(v).trim();
 const num=v => { const n=parseFloat(clean(v).replace("%","")); return Number.isFinite(n)?n:null; };
@@ -104,18 +104,18 @@ function render(){
     body.appendChild(tr);
   });
 
-  const chartRows=CHART_METRICS.map(name=>metric(rows,name)).filter(Boolean).map(r=>({label:clean(field(r,["Metric"])),value:pctValue(field(r,["Percentile"]))})).filter(x=>x.value!==null);
-  if(chart)chart.destroy();
-  const labelPlugin={id:"barValueLabels",afterDatasetsDraw(c){const{ctx}=c;ctx.save();ctx.fillStyle="#f4f7fb";ctx.font="700 12px Segoe UI, Arial";ctx.textBaseline="middle";const meta=c.getDatasetMeta(0);meta.data.forEach((bar,i)=>{const v=c.data.datasets[0].data[i];ctx.fillText(`${Math.round(v)}%`,Math.min(bar.x+8,c.chartArea.right-34),bar.y);});ctx.restore();}};
-  chart=new Chart($("profileChart"),{
-    type:"bar",
-    data:{labels:chartRows.map(x=>x.label),datasets:[{data:chartRows.map(x=>x.value),borderWidth:0}]},
-    plugins:[labelPlugin],
-    options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,layout:{padding:{right:42}},
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${Math.round(c.raw)}th percentile`}},
-        annotation:{annotations:{medianLine:{type:"line",xMin:50,xMax:50,borderColor:"#c7d4e4",borderWidth:1.5,borderDash:[6,6],label:{display:true,content:"50th",position:"start",color:"#c7d4e4",backgroundColor:"rgba(11,18,32,.9)"}}}}},
-      scales:{x:{min:0,max:100,ticks:{callback:v=>v+"%",color:"#9fb0c6"},grid:{color:"#26354a"}},y:{ticks:{color:"#f4f7fb"},grid:{display:false}}}}
-  });
+  const chartRows=CHART_METRICS.map(name=>metric(rows,name)).filter(Boolean).map(r=>({
+    label:clean(field(r,["Metric"])),
+    value:pctValue(field(r,["Percentile"]))
+  })).filter(x=>x.value!==null);
+
+  const snapshot=$("profileSnapshot");
+  snapshot.innerHTML=chartRows.map(x=>`
+    <div class="percentile-card">
+      <div class="percentile-card-label">${x.label}</div>
+      <div class="percentile-card-box">${Math.round(x.value)}%</div>
+    </div>
+  `).join("");
 }
 function populate(){
   const seasons=[...new Set(DATA.map(r=>clean(field(r,["Season"]))).filter(Boolean))].sort().reverse();
@@ -123,22 +123,45 @@ function populate(){
   if(seasons.includes("2025-26"))$("season").value="2025-26";
   refreshPlayers();
 }
+function allPlayers(){
+  return [...new Set(DATA.map(r=>clean(field(r,["Player"]))).filter(Boolean))].sort();
+}
+function latestSeasonForPlayer(player){
+  const seasons=[...new Set(DATA.filter(r=>clean(field(r,["Player"]))===player).map(r=>clean(field(r,["Season"]))).filter(Boolean))];
+  return seasons.sort((a,b)=>b.localeCompare(a))[0]||"";
+}
 function refreshPlayers(){
-  const season=$("season").value;
-  const players=[...new Set(DATA.filter(r=>clean(field(r,["Season"]))===season).map(r=>clean(field(r,["Player"]))).filter(Boolean))].sort();
+  const players=allPlayers();
   $("players").innerHTML=players.map(p=>`<option value="${p.replace(/"/g,"&quot;")}"></option>`).join("");
-  const preferred=players.includes("Kyle Neuber")?"Kyle Neuber":players[0];
-  if(!players.includes($("player").value))$("player").value=preferred||"";
+  const current=$("player").value;
+  if(!players.includes(current)){
+    const seasonPlayers=[...new Set(DATA.filter(r=>clean(field(r,["Season"]))===$("season").value).map(r=>clean(field(r,["Player"]))).filter(Boolean))].sort();
+    $("player").value=seasonPlayers.includes("Kyle Neuber")?"Kyle Neuber":(seasonPlayers[0]||players[0]||"");
+  }
   render();
 }
-$("season").addEventListener("change",refreshPlayers);
-$("player").addEventListener("change",render);
-$("player").addEventListener("input",()=>{if([...$("players").options].some(o=>o.value===$("player").value))render();});
+function selectPlayerLatestSeason(){
+  const player=$("player").value;
+  if(!allPlayers().includes(player)) return;
+  const latest=latestSeasonForPlayer(player);
+  if(latest)$("season").value=latest;
+  render();
+}
+$("season").addEventListener("change",()=>{
+  const season=$("season").value;
+  const players=[...new Set(DATA.filter(r=>clean(field(r,["Season"]))===season).map(r=>clean(field(r,["Player"]))).filter(Boolean))].sort();
+  if(!players.includes($("player").value))$("player").value=players.includes("Kyle Neuber")?"Kyle Neuber":(players[0]||"");
+  render();
+});
+$("player").addEventListener("change",selectPlayerLatestSeason);
+$("player").addEventListener("input",()=>{
+  if(allPlayers().includes($("player").value))selectPlayerLatestSeason();
+});
 
 if(typeof Papa==="undefined"){
   $("playerName").textContent="Could not load analytics library";
 }else{
-  Papa.parse("./ECHL_Player_Analytics.csv?v=10",{
+  Papa.parse("./ECHL_Player_Analytics.csv?v=11",{
     download:true,header:true,dynamicTyping:false,skipEmptyLines:true,
     complete:r=>{DATA=r.data;populate();},
     error:e=>{

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="ECHL player analytics with position-specific benchmarks, percentile profiles, and searchable player reports.">
   <title>ECHL Player Analytics</title>
-  <link rel="stylesheet" href="./style.css?v=10">
+  <link rel="stylesheet" href="./style.css?v=11">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
@@ -57,9 +57,9 @@
     <section class="card">
       <div class="section-head">
         <div><p class="eyebrow">PERCENTILE SNAPSHOT</p><h3>Goals · Assists · Points · TOI · Hits</h3></div>
-        <span class="note">50th percentile = positional midpoint</span>
+        <span class="note">Higher percentile = stronger result</span>
       </div>
-      <div class="chart-wrap"><canvas id="profileChart"></canvas></div>
+      <div class="percentile-grid" id="profileSnapshot"></div>
       <p class="chart-note">Percentiles are season- and position-specific. The snapshot highlights scoring production, usage, and physical impact.</p>
     </section>
 
@@ -92,6 +92,6 @@
 
     <footer><span>© 2026 Kyle Neuber</span><span>Data sourced from InStat</span></footer>
   </main>
-  <script src="./app.js?v=10"></script>
+  <script src="./app.js?v=11"></script>
 </body>
 </html>
