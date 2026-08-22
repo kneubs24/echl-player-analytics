@@ -3,27 +3,34 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="ECHL player analytics with position-specific benchmarks, percentile profiles, and searchable player reports.">
   <title>ECHL Player Analytics</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
   <main class="wrap">
-    <header>
+    <header class="site-header">
       <div>
         <p class="eyebrow">PLAYER COMPARISON DATABASE</p>
         <h1>ECHL Player Analytics</h1>
         <p class="sub">Performance vs. ECHL players · Minimum 10 GP · Position-specific benchmarks</p>
       </div>
+      <nav class="top-nav" aria-label="Primary">
+        <a href="#analytics">Analytics</a>
+        <a href="#methodology">Methodology</a>
+        <a href="#about">About</a>
+      </nav>
     </header>
 
-    <section class="controls card">
+    <section class="controls card" id="analytics">
       <label>Season
         <select id="season"></select>
       </label>
       <label class="player-search">Player
-        <input id="player" list="players" placeholder="Search player">
+        <input id="player" list="players" placeholder="Search player" autocomplete="off">
         <datalist id="players"></datalist>
       </label>
     </section>
@@ -45,24 +52,72 @@
 
     <section class="card">
       <div class="section-head">
-        <div><p class="eyebrow">QUICK PROFILE</p><h3>Percentile snapshot</h3></div>
-        <span class="note">50th percentile = positional median area</span>
+        <div>
+          <p class="eyebrow">QUICK PROFILE</p>
+          <h3>Percentile snapshot</h3>
+        </div>
+        <span class="note">50th percentile = positional midpoint</span>
       </div>
       <div class="chart-wrap"><canvas id="profileChart"></canvas></div>
+      <p class="chart-note">Percentiles are season- and position-specific. Lower-is-better metrics such as puck losses are inverted so a higher percentile is always better.</p>
     </section>
 
     <section class="card">
       <div class="section-head">
-        <div><p class="eyebrow">FULL REPORT</p><h3>Player analytics</h3></div>
+        <div>
+          <p class="eyebrow">FULL REPORT</p>
+          <h3>Player analytics</h3>
+        </div>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Category</th><th>Metric</th><th>Per-game value</th><th>ECHL Avg</th><th>Percentile</th></tr></thead>
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Metric</th>
+              <th>Per-game value</th>
+              <th>ECHL Avg</th>
+              <th>Percentile</th>
+            </tr>
+          </thead>
           <tbody id="metrics"></tbody>
         </table>
       </div>
     </section>
+
+    <section class="card info-grid" id="methodology">
+      <div>
+        <p class="eyebrow">METHODOLOGY</p>
+        <h3>How to read the data</h3>
+      </div>
+      <div class="info-copy">
+        <p><strong>Minimum sample:</strong> Players must have at least 10 games played in the selected season.</p>
+        <p><strong>Position-specific benchmarks:</strong> Forwards are compared with forwards and defensemen are compared with defensemen.</p>
+        <p><strong>Per-game values:</strong> Counting metrics are shown as per-game rates so players with different games played can be compared more fairly.</p>
+        <p><strong>Percentiles:</strong> Higher percentiles always indicate stronger results. Lower-is-better metrics such as puck losses are inverted before ranking.</p>
+        <p><strong>Faceoffs:</strong> Faceoff Win % is shown only when a player meets the minimum faceoff sample in the underlying model; otherwise it appears as N/A.</p>
+        <p><strong>Data source:</strong> Player-tracking data imported from the underlying ECHL/InStat dataset used to build this project.</p>
+      </div>
+    </section>
+
+    <section class="card about-card" id="about">
+      <div>
+        <p class="eyebrow">ABOUT THE PROJECT</p>
+        <h3>Kyle Neuber — Hockey Analytics Portfolio</h3>
+        <p class="sub">A searchable player-comparison project built to explore ECHL skater performance through transparent, position-specific benchmarking.</p>
+      </div>
+      <div class="about-actions">
+        <button id="loadKyle" type="button">View Kyle Neuber</button>
+        <a href="#analytics">Explore players</a>
+      </div>
+    </section>
+
+    <footer>
+      <span>ECHL Player Analytics</span>
+      <span>Built by Kyle Neuber</span>
+    </footer>
   </main>
+
   <script src="app.js"></script>
 </body>
 </html>
