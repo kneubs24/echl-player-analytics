@@ -395,3 +395,13 @@ img{max-width:100%}.about-copy p{overflow-wrap:anywhere}
 @media(max-width:760px){
   .percentile-grid{grid-template-columns:repeat(2,1fr)!important}
 }
+
+/* v18 — stable percentile colors */
+.percentile-card-box.at-or-above-midpoint{
+  background:#1d5d8d !important;
+  border-color:#3b6d95 !important;
+}
+.percentile-card-box.below-midpoint{
+  background:#8a4650 !important;
+  border-color:#a65a64 !important;
+}

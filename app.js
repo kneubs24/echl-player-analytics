@@ -113,7 +113,7 @@ function render(){
   snapshot.innerHTML=chartRows.map(x=>`
     <div class="percentile-card">
       <div class="percentile-card-label">${x.label}</div>
-      <div class="percentile-card-box">${Math.round(x.value)}%</div>
+      <div class="percentile-card-box ${x.value<50 ? "below-midpoint" : "at-or-above-midpoint"}">${Math.round(x.value)}%</div>
     </div>
   `).join("");
 }
@@ -189,15 +189,53 @@ $("player").addEventListener("input",()=>{
   }
 });
 
-if(typeof Papa==="undefined"){
-  $("playerName").textContent="Could not load analytics library";
-}else{
-  Papa.parse("./ECHL_Player_Analytics.csv?v=13",{
-    download:true,header:true,dynamicTyping:false,skipEmptyLines:true,
-    complete:r=>{DATA=r.data;populate();},
-    error:e=>{
-      $("playerName").textContent="Could not load analytics data";
-      console.error(e);
+
+function parseCSV(text){
+  const rows=[];
+  let row=[], field="", inQuotes=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i];
+    if(inQuotes){
+      if(ch === '"'){
+        if(text[i+1] === '"'){ field+='"'; i++; }
+        else inQuotes=false;
+      }else{
+        field+=ch;
+      }
+    }else{
+      if(ch === '"') inQuotes=true;
+      else if(ch === ','){ row.push(field); field=""; }
+      else if(ch === '\n'){
+        row.push(field); field="";
+        if(row.some(v=>v!=="")) rows.push(row);
+        row=[];
+      }else if(ch !== '\r'){
+        field+=ch;
+      }
     }
+  }
+  if(field!=="" || row.length){ row.push(field); if(row.some(v=>v!=="")) rows.push(row); }
+  if(!rows.length) return [];
+  const headers=rows[0];
+  return rows.slice(1).map(values=>{
+    const obj={};
+    headers.forEach((h,i)=>obj[h]=values[i]??"");
+    return obj;
   });
 }
+
+fetch("./ECHL_Player_Analytics.csv?v=18", {cache:"no-store"})
+  .then(response=>{
+    if(!response.ok) throw new Error(`CSV request failed: ${response.status}`);
+    return response.text();
+  })
+  .then(text=>{
+    DATA=parseCSV(text);
+    if(!DATA.length) throw new Error("CSV loaded but contained no rows");
+    populate();
+  })
+  .catch(error=>{
+    console.error(error);
+    $("playerName").textContent="Could not load analytics data";
+    $("playerMeta").textContent="Refresh the page or verify ECHL_Player_Analytics.csv is in the repository.";
+  });
