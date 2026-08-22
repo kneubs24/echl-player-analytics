@@ -129,3 +129,74 @@ footer{display:flex;justify-content:space-between;color:#71839b;font-size:12px;p
 
 /* v4 */
 img{max-width:100%}.about-copy p{overflow-wrap:anywhere}
+
+
+/* v5 — compact one-screen About page */
+@media (min-width: 901px) and (min-height: 700px) {
+  .home-nav{
+    height:50px;
+    padding:0 28px;
+  }
+  .home-nav .top-nav a{
+    padding:16px 0 13px;
+  }
+  .about-hero{
+    height:calc(100vh - 50px);
+    min-height:0;
+    grid-template-columns:minmax(500px,48%) minmax(0,52%);
+    overflow:hidden;
+  }
+  .about-copy{
+    padding:24px 34px 22px;
+    max-width:680px;
+    align-self:center;
+  }
+  .about-copy h1{
+    font-size:clamp(44px,4.2vw,62px);
+    margin-bottom:8px;
+  }
+  .motto{
+    font-size:16px;
+  }
+  .accent-rule{
+    margin:14px 0;
+  }
+  .about-copy>p{
+    font-size:14px;
+    line-height:1.38;
+    margin-bottom:10px;
+  }
+  .winning-block{
+    grid-template-columns:32px 1fr;
+    gap:10px;
+    margin:11px 0;
+  }
+  .trophy-icon{
+    font-size:22px;
+  }
+  .winning-block h2{
+    font-size:20px;
+    margin-bottom:3px;
+  }
+  .winning-block p{
+    font-size:14px;
+    line-height:1.35;
+  }
+  blockquote{
+    margin:11px 0 14px;
+    font-size:14px;
+    line-height:1.35;
+  }
+  .cta{
+    padding:13px 18px;
+    font-size:13px;
+  }
+  .about-photo{
+    min-height:0;
+    height:100%;
+  }
+  .about-photo img{
+    height:100%;
+    object-position:center 28%;
+  }
+}
