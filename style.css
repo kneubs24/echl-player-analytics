@@ -126,3 +126,6 @@ footer{display:flex;justify-content:space-between;color:#71839b;font-size:12px;p
   .chart-wrap{height:470px}
   .info-grid{grid-template-columns:1fr}
 }
+
+/* v4 */
+img{max-width:100%}.about-copy p{overflow-wrap:anywhere}
