@@ -3,7 +3,9 @@ let DATA=[];
 const $=id=>document.getElementById(id);
 const clean=v => (v===undefined||v===null) ? "" : String(v).trim();
 const num=v => { const n=parseFloat(clean(v).replace("%","")); return Number.isFinite(n)?n:null; };
-const isPctMetric=m => /%$/.test(clean(m)) || ["CORSI For %","Fenwick For %","xG For %","Faceoff Win %","Accurate Passes %","Puck Battles Won %","DZ Puck Losses"].includes(clean(m));
+const isPctMetric=m => /%$/.test(clean(m)) || ["CORSI For %","Fenwick For %","xG For %",
+    "xGF",
+    "xGA","Faceoff Win %","Accurate Passes %","Puck Battles Won %","DZ Puck Losses"].includes(clean(m));
 const CATEGORY_ORDER=["Offense","Possession","Puck Management","Discipline","Skill","Role / Context","Role"];
 const METRIC_ORDER={
   "Offense":[
@@ -13,6 +15,8 @@ const METRIC_ORDER={
     "Second Assists",
     "Points",
     "Scoring Chances",
+    "Inner Slot Shots",
+    "Shots per 60",
     "xG per Shot",
     "Shots on Goal",
     "Passes to Slot",
@@ -51,7 +55,7 @@ const METRIC_ORDER={
     "Hits"
   ]
 };
-const CHART_METRICS=["Points","Expected Goals","CORSI For %","xG For %","Scoring Chances","Puck Battles Won %","Puck Losses","TOI","Hits"];
+const CHART_METRICS=["Points","Expected Goals","CORSI For %","xG For %","Puck Losses","TOI","Hits"];
 
 function field(row,names){for(const n of names){if(Object.prototype.hasOwnProperty.call(row,n)) return row[n];}return "";}
 function fmt(v,metric,percentile=false){
@@ -224,7 +228,7 @@ function parseCSV(text){
   });
 }
 
-fetch("./ECHL_Player_Analytics.csv?v=19", {cache:"no-store"})
+fetch("./ECHL_Player_Analytics.csv?v=21", {cache:"no-store"})
   .then(response=>{
     if(!response.ok) throw new Error(`CSV request failed: ${response.status}`);
     return response.text();

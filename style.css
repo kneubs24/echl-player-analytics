@@ -405,16 +405,3 @@ img{max-width:100%}.about-copy p{overflow-wrap:anywhere}
   background:#8a4650 !important;
   border-color:#a65a64 !important;
 }
-
-/* v19 — nine-metric impact snapshot */
-.percentile-grid{
-  grid-template-columns:repeat(5,minmax(115px,1fr)) !important;
-  gap:16px !important;
-}
-.percentile-card-box{max-width:140px}
-@media(max-width:1000px){
-  .percentile-grid{grid-template-columns:repeat(3,1fr) !important}
-}
-@media(max-width:620px){
-  .percentile-grid{grid-template-columns:repeat(2,1fr) !important}
-}
