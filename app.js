@@ -51,7 +51,7 @@ const METRIC_ORDER={
     "Hits"
   ]
 };
-const CHART_METRICS=["Points","Expected Goals","CORSI For %","xG For %","Puck Losses","TOI","Hits"];
+const CHART_METRICS=["Points","Expected Goals","CORSI For %","xG For %","Scoring Chances","Puck Battles Won %","Puck Losses","TOI","Hits"];
 
 function field(row,names){for(const n of names){if(Object.prototype.hasOwnProperty.call(row,n)) return row[n];}return "";}
 function fmt(v,metric,percentile=false){
@@ -224,7 +224,7 @@ function parseCSV(text){
   });
 }
 
-fetch("./ECHL_Player_Analytics.csv?v=18", {cache:"no-store"})
+fetch("./ECHL_Player_Analytics.csv?v=19", {cache:"no-store"})
   .then(response=>{
     if(!response.ok) throw new Error(`CSV request failed: ${response.status}`);
     return response.text();
