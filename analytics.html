@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="ECHL player analytics with position-specific benchmarks, percentile profiles, and searchable player reports.">
   <title>ECHL Player Analytics</title>
-  <link rel="stylesheet" href="./style.css?v=21">
+  <link rel="stylesheet" href="./style.css?v=22">
 </head>
 <body>
   <main class="wrap analytics-wrap">
@@ -81,7 +81,8 @@
         <p><strong>Minimum sample:</strong> Players must have at least 10 games played in the selected season.</p>
         <p><strong>Position-specific benchmarks:</strong> Forwards are compared with forwards and defensemen are compared with defensemen.</p>
         <p><strong>Per-game values:</strong> Counting metrics are shown as per-game rates so players with different games played can be compared more fairly.</p>
-        <p><strong>Percentiles:</strong> Higher percentiles always indicate stronger results. Lower-is-better metrics such as puck losses are inverted before ranking.</p>
+        <p><strong>Percentiles:</strong> Higher percentiles always indicate stronger results. Lower-is-better metrics are inverted before ranking.</p>
+        <p><strong>Puck Loss Rate:</strong> Puck losses per 100 puck touches. Lower is better, so the percentile is inverted.</p>
         <p><strong>Faceoffs:</strong> Faceoff Win % appears only when the player meets the minimum faceoff sample.</p>
         <p><strong>Data source:</strong> InStat / ECHL player-tracking data used for this project.</p>
       </div>
@@ -89,6 +90,6 @@
 
     <footer><span>© 2026 Kyle Neuber</span><span>Data sourced from InStat</span></footer>
   </main>
-  <script src="./app.js?v=21"></script>
+  <script src="./app.js?v=22"></script>
 </body>
 </html>
