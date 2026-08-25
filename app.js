@@ -187,31 +187,27 @@ function cyclePlayer(direction){
 function findBestPlayerMatch(query){
   const q=clean(query).toLowerCase();
   if(!q) return "";
-  const players=allPlayers();
+  const players=playersForCurrentFilters();
   const exact=players.find(p=>p.toLowerCase()===q);
   if(exact) return exact;
   const starts=players.filter(p=>p.toLowerCase().startsWith(q));
   if(starts.length) return starts[0];
   const contains=players.filter(p=>p.toLowerCase().includes(q));
-  return contains.length?contains[0]:"";
+  return contains.length ? contains[0] : "";
 }
 function resolvePlayerSearch(){
   const match=findBestPlayerMatch($("player").value);
   if(!match) return;
   $("player").value=match;
-  const latest=latestSeasonForPlayer(match);
-  if(latest) $("season").value=latest;
-  const team=teamForPlayerSeason(match,latest);
-  refreshTeams(team);
   render();
 }
 function refreshPlayers(){
-  const players=allPlayers();
+  const players=playersForCurrentFilters();
   $("players").innerHTML=players.map(p=>`<option value="${p.replace(/"/g,"&quot;")}"></option>`).join("");
-  const filteredPlayers=playersForCurrentFilters();
+
   const current=$("player").value;
-  if(!filteredPlayers.includes(current)){
-    $("player").value=filteredPlayers.includes("Kyle Neuber")?"Kyle Neuber":(filteredPlayers[0]||"");
+  if(!players.includes(current)){
+    $("player").value=players.includes("Kyle Neuber") ? "Kyle Neuber" : (players[0] || "");
   }
   render();
 }
@@ -244,12 +240,29 @@ $("player").addEventListener("keydown",e=>{
     cyclePlayer(-1);
   }
 });
+
+function attachPlayerArrowNavigation(element){
+  element.addEventListener("keydown",e=>{
+    if(e.key==="ArrowDown"){
+      e.preventDefault();
+      cyclePlayer(1);
+    }else if(e.key==="ArrowUp"){
+      e.preventDefault();
+      cyclePlayer(-1);
+    }
+  });
+}
+attachPlayerArrowNavigation($("season"));
+attachPlayerArrowNavigation($("team"));
+
 $("player").addEventListener("blur",resolvePlayerSearch);
 $("player").addEventListener("input",()=>{
-  const exact=allPlayers().find(p=>p.toLowerCase()===$("player").value.toLowerCase());
+  const exact=playersForCurrentFilters().find(
+    p=>p.toLowerCase()===$("player").value.toLowerCase()
+  );
   if(exact){
     $("player").value=exact;
-    selectPlayerLatestSeason();
+    render();
   }
 });
 
@@ -288,7 +301,7 @@ function parseCSV(text){
   });
 }
 
-fetch("./ECHL_Player_Analytics.csv?v=24", {cache:"no-store"})
+fetch("./ECHL_Player_Analytics.csv?v=25", {cache:"no-store"})
   .then(response=>{
     if(!response.ok) throw new Error(`CSV request failed: ${response.status}`);
     return response.text();
