@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="ECHL player analytics with position-specific benchmarks, percentile profiles, and searchable player reports.">
   <title>ECHL Player Analytics</title>
-  <link rel="stylesheet" href="./style.css?v=22">
+  <link rel="stylesheet" href="./style.css?v=23">
 </head>
 <body>
   <main class="wrap analytics-wrap">
@@ -29,6 +29,9 @@
     <section class="controls card" id="analytics">
       <label>Season
         <select id="season"></select>
+      </label>
+      <label>Team
+        <select id="team"></select>
       </label>
       <label class="player-search">Player
         <input id="player" list="players" placeholder="Search player" autocomplete="off">
@@ -90,6 +93,6 @@
 
     <footer><span>© 2026 Kyle Neuber</span><span>Data sourced from InStat</span></footer>
   </main>
-  <script src="./app.js?v=22"></script>
+  <script src="./app.js?v=23"></script>
 </body>
 </html>

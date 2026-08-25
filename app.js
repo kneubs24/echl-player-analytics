@@ -66,7 +66,15 @@ function fmt(v,metric,percentile=false){
   return n.toFixed(2);
 }
 function pctValue(v){let n=num(v);if(n===null)return null;return n<=1?n*100:n;}
-function rowsFor(player,season){return DATA.filter(r=>clean(field(r,["Player"]))===player&&clean(field(r,["Season"]))===season);}
+function rowsFor(player,season){
+  const team=$("team") ? $("team").value : "All Teams";
+  return DATA.filter(r=>{
+    const playerMatch=clean(field(r,["Player"]))===player;
+    const seasonMatch=clean(field(r,["Season"]))===season;
+    const teamMatch=team==="All Teams" || clean(field(r,["Team"]))===team;
+    return playerMatch && seasonMatch && teamMatch;
+  });
+}
 function metric(rows,name){return rows.find(r=>clean(field(r,["Metric"]))===name);}
 function sortRows(rows){
   return [...rows].sort((a,b)=>{
@@ -125,6 +133,7 @@ function populate(){
   const seasons=[...new Set(DATA.map(r=>clean(field(r,["Season"]))).filter(Boolean))].sort().reverse();
   $("season").innerHTML=seasons.map(s=>`<option>${s}</option>`).join("");
   if(seasons.includes("2025-26"))$("season").value="2025-26";
+  refreshTeams();
   refreshPlayers();
 }
 function allPlayers(){
@@ -133,6 +142,46 @@ function allPlayers(){
 function latestSeasonForPlayer(player){
   const seasons=[...new Set(DATA.filter(r=>clean(field(r,["Player"]))===player).map(r=>clean(field(r,["Season"]))).filter(Boolean))];
   return seasons.sort((a,b)=>b.localeCompare(a))[0]||"";
+}
+
+function teamsForSeason(season){
+  return [...new Set(
+    DATA.filter(r=>clean(field(r,["Season"]))===season)
+        .map(r=>clean(field(r,["Team"])))
+        .filter(Boolean)
+  )].sort();
+}
+function teamForPlayerSeason(player,season){
+  const row=DATA.find(r=>clean(field(r,["Player"]))===player && clean(field(r,["Season"]))===season);
+  return row ? clean(field(row,["Team"])) : "";
+}
+function playersForCurrentFilters(){
+  const season=$("season").value;
+  const team=$("team").value;
+  return [...new Set(
+    DATA.filter(r=>{
+      const seasonMatch=clean(field(r,["Season"]))===season;
+      const teamMatch=team==="All Teams" || clean(field(r,["Team"]))===team;
+      return seasonMatch && teamMatch;
+    }).map(r=>clean(field(r,["Player"]))).filter(Boolean)
+  )].sort();
+}
+function refreshTeams(preferredTeam=""){
+  const season=$("season").value;
+  const teams=teamsForSeason(season);
+  $("team").innerHTML=['All Teams',...teams].map(t=>`<option value="${t.replace(/"/g,"&quot;")}">${t}</option>`).join("");
+  if(preferredTeam && teams.includes(preferredTeam)) $("team").value=preferredTeam;
+  else $("team").value="All Teams";
+}
+function cyclePlayer(direction){
+  const players=playersForCurrentFilters();
+  if(!players.length) return;
+  let current=$("player").value;
+  let idx=players.indexOf(current);
+  if(idx===-1) idx=direction>0?-1:0;
+  idx=(idx+direction+players.length)%players.length;
+  $("player").value=players[idx];
+  render();
 }
 
 function findBestPlayerMatch(query){
@@ -152,15 +201,17 @@ function resolvePlayerSearch(){
   $("player").value=match;
   const latest=latestSeasonForPlayer(match);
   if(latest) $("season").value=latest;
+  const team=teamForPlayerSeason(match,latest);
+  refreshTeams(team);
   render();
 }
 function refreshPlayers(){
   const players=allPlayers();
   $("players").innerHTML=players.map(p=>`<option value="${p.replace(/"/g,"&quot;")}"></option>`).join("");
+  const filteredPlayers=playersForCurrentFilters();
   const current=$("player").value;
-  if(!players.includes(current)){
-    const seasonPlayers=[...new Set(DATA.filter(r=>clean(field(r,["Season"]))===$("season").value).map(r=>clean(field(r,["Player"]))).filter(Boolean))].sort();
-    $("player").value=seasonPlayers.includes("Kyle Neuber")?"Kyle Neuber":(seasonPlayers[0]||players[0]||"");
+  if(!filteredPlayers.includes(current)){
+    $("player").value=filteredPlayers.includes("Kyle Neuber")?"Kyle Neuber":(filteredPlayers[0]||"");
   }
   render();
 }
@@ -169,19 +220,28 @@ function selectPlayerLatestSeason(){
   if(!allPlayers().includes(player)) return;
   const latest=latestSeasonForPlayer(player);
   if(latest)$("season").value=latest;
+  const team=teamForPlayerSeason(player,latest);
+  refreshTeams(team);
   render();
 }
 $("season").addEventListener("change",()=>{
-  const season=$("season").value;
-  const players=[...new Set(DATA.filter(r=>clean(field(r,["Season"]))===season).map(r=>clean(field(r,["Player"]))).filter(Boolean))].sort();
-  if(!players.includes($("player").value))$("player").value=players.includes("Kyle Neuber")?"Kyle Neuber":(players[0]||"");
-  render();
+  refreshTeams();
+  refreshPlayers();
+});
+$("team").addEventListener("change",()=>{
+  refreshPlayers();
 });
 $("player").addEventListener("change",resolvePlayerSearch);
 $("player").addEventListener("keydown",e=>{
   if(e.key==="Enter"){
     e.preventDefault();
     resolvePlayerSearch();
+  }else if(e.key==="ArrowDown"){
+    e.preventDefault();
+    cyclePlayer(1);
+  }else if(e.key==="ArrowUp"){
+    e.preventDefault();
+    cyclePlayer(-1);
   }
 });
 $("player").addEventListener("blur",resolvePlayerSearch);
@@ -228,7 +288,7 @@ function parseCSV(text){
   });
 }
 
-fetch("./ECHL_Player_Analytics.csv?v=22", {cache:"no-store"})
+fetch("./ECHL_Player_Analytics.csv?v=23", {cache:"no-store"})
   .then(response=>{
     if(!response.ok) throw new Error(`CSV request failed: ${response.status}`);
     return response.text();

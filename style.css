@@ -405,3 +405,12 @@ img{max-width:100%}.about-copy p{overflow-wrap:anywhere}
   background:#8a4650 !important;
   border-color:#a65a64 !important;
 }
+
+/* v23 — season/team/player controls */
+.controls > label:first-child{flex:0 0 150px}
+.controls > label:nth-child(2){flex:0 0 260px}
+.controls .player-search{flex:1}
+@media(max-width:760px){
+  .controls > label:first-child,
+  .controls > label:nth-child(2){flex:1 1 auto}
+}
