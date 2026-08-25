@@ -288,7 +288,7 @@ function parseCSV(text){
   });
 }
 
-fetch("./ECHL_Player_Analytics.csv?v=23", {cache:"no-store"})
+fetch("./ECHL_Player_Analytics.csv?v=24", {cache:"no-store"})
   .then(response=>{
     if(!response.ok) throw new Error(`CSV request failed: ${response.status}`);
     return response.text();
