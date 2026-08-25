@@ -248,8 +248,8 @@ function parseCSV(text){
 }
 
 Promise.all([
-  fetch("./ncaa_report.csv?v=30",{cache:"no-store"}).then(r=>{ if(!r.ok) throw new Error("report fetch failed"); return r.text(); }),
-  fetch("./projections.json?v=30",{cache:"no-store"}).then(r=>{ if(!r.ok) throw new Error("projections fetch failed"); return r.json(); })
+  fetch("./ncaa_report.csv?v=31",{cache:"no-store"}).then(r=>{ if(!r.ok) throw new Error("report fetch failed"); return r.text(); }),
+  fetch("./projections.json?v=31",{cache:"no-store"}).then(r=>{ if(!r.ok) throw new Error("projections fetch failed"); return r.json(); })
 ]).then(([csvText,projJson])=>{
   DATA=parseCSV(csvText);
   PROJECTIONS=projJson;
