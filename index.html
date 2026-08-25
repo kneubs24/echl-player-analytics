@@ -3,127 +3,53 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="NCAA senior prospect forecasting — statistical comps and pro-league probability against historical outcomes.">
-  <title>NCAA Prospect Forecast</title>
-  <link rel="stylesheet" href="./style.css?v=28">
+  <meta name="description" content="Kyle Neuber — professional hockey player, leader, MBA graduate, and hockey analytics portfolio.">
+  <title>Kyle Neuber | Hockey Analytics</title>
+  <link rel="stylesheet" href="./style.css?v=29">
 </head>
-<body>
-  <main class="wrap analytics-wrap">
-    <header class="site-header compact">
-      <a class="brand" href="/echl-player-analytics/">NCAA <span>PROSPECT FORECAST</span></a>
-      <nav class="top-nav">
-        <a href="/echl-player-analytics/">About Me</a>
-        <a href="/echl-player-analytics/analytics.html">ECHL Analytics</a>
-        <a class="active" href="/echl-player-analytics/ncaa/">NCAA Prospects</a>
-      </nav>
-    </header>
+<body class="home-body">
+  <header class="home-nav">
+    <a class="brand" href="./index.html">ECHL <span>PLAYER ANALYTICS</span></a>
+    <nav class="top-nav">
+      <a class="active" href="./index.html">About Me</a>
+      <a href="./analytics.html">Analytics</a>
+        <a href="./ncaa/">NCAA Prospects</a>
+    </nav>
+  </header>
 
-    <section class="page-title">
-      <div>
-        <p class="eyebrow">SENIOR SCOUTING DATABASE</p>
-        <h1>NCAA Prospect Forecast</h1>
-        <p class="sub">Final-year-eligibility NCAA players only · Statistical comps vs. historical outcomes · Position-specific benchmarks</p>
+  <main class="about-hero">
+    <section class="about-copy">
+      <h1>Kyle Neuber</h1>
+<div class="achievement-strip">
+        <span>5× Kelly Cup Champion</span>
+        <span>12-Year Pro</span>
+        <span>MBA</span>
+        <span>6-Year PHPA Representative</span>
       </div>
-    </section>
+      <div class="accent-rule"></div>
 
-    <section class="controls card" id="controls">
-      <label class="player-search">Player
-        <input id="player" list="players" placeholder="Search prospect" autocomplete="off">
-        <datalist id="players"></datalist>
-      </label>
-      <label>Position
-        <select id="position">
-          <option value="All">All</option>
-          <option value="F">Forwards</option>
-          <option value="D">Defensemen</option>
-        </select>
-      </label>
-      <label>Sort by
-        <select id="sortMode">
-          <option value="score">Comp score</option>
-          <option value="name">Name</option>
-        </select>
-      </label>
-      <div class="filter-hint">2025-26 season · players flagged as likely in their final year of NCAA eligibility (age 22+ or 4th+ observed season). Sorted by Comp Score by default — highest statistical translation to pro hockey first.</div>
-    </section>
+      <p>As a twelve-year professional hockey player, five-time Kelly Cup champion, and six-year PHPA player representative, I bring a unique combination of high-level playing experience, administrative capability, and leadership skills.</p>
 
-    <section class="hero card">
-      <div>
-        <p class="eyebrow">QUICK PROFILE</p>
-        <h2 id="playerName">Loading…</h2>
-        <p id="playerMeta" class="sub"></p>
-        <span class="badge-age" id="ageBadge"></span>
-      </div>
-      <div class="stats season-stats">
-        <div><span>GP</span><strong id="gp">—</strong></div>
-        <div><span>PTS</span><strong id="pts">—</strong></div>
-        <div><span>G</span><strong id="goals">—</strong></div>
-        <div><span>A</span><strong id="assists">—</strong></div>
-        <div><span>PIM</span><strong id="pim">—</strong></div>
-      </div>
-    </section>
+      <p>I recently earned my Master of Business Administration while playing professional hockey so I can integrate advanced organizational skills and analytics into operational support, ensuring a seamless and professional approach to team success. I also had academic success, earning an A- average in my Master's program.</p>
 
-    <section class="card" id="projectionSection">
-      <div class="section-head">
-        <div><p class="eyebrow">PROJECTION</p><h3>Pro league forecast</h3></div>
-        <span class="note" id="nCompsNote"></span>
-      </div>
-      <div class="projection-grid">
+      <p>During my time as a professional hockey player, I learned how to win and did so: five Kelly Cup Championships, two Kelly Cup Finalists, and a Calder Cup Finalist.</p>
+
+      <div class="winning-block">
+        <div class="trophy-icon">🏆</div>
         <div>
-          <div class="score-panel">
-            <div class="score-value" id="scoreValue">—</div>
-            <div class="score-label">Comp Score</div>
-            <div class="score-sub">Weighted average outcome value across the 10 nearest historical comps. Higher = comps skew toward higher pro tiers.</div>
-          </div>
-          <div class="probability-bars" id="probabilityBars"></div>
-        </div>
-        <div class="comps-panel">
-          <h4 style="margin:0 0 10px;font-size:15px;color:#dbe6f4">Statistical comps</h4>
-          <div class="comps-list" id="compsList"></div>
+          <h2>Winning is a choice.</h2>
+          <p>That choice is reflected in our actions, and our actions are the sum of our culture. Winning doesn't happen by accident—it comes from daily behaviours, and those behaviours are driven by the team's culture.</p>
         </div>
       </div>
-      <p class="chart-note">Comps are historical NCAA seniors (2018-19 through 2023-24 classes) with a resolved pro outcome, matched on a 29-metric percentile profile within the same position. "No pro yet / never" includes players who may still sign in an untracked league — it is not a judgment on their hockey career.</p>
+
+      <blockquote>I attack each day with my love for the game and the idea that we get better every day.</blockquote>
+
+      <a class="cta" href="./analytics.html">VIEW ECHL PLAYER ANALYTICS <span>→</span></a>
     </section>
 
-    <section class="card">
-      <div class="section-head">
-        <div><p class="eyebrow">PERCENTILE SNAPSHOT</p><h3>Player impact profile</h3></div>
-        <span class="note">Higher percentile = stronger result, vs. NCAA senior peers</span>
-      </div>
-      <div class="percentile-grid" id="profileSnapshot"></div>
-      <p class="chart-note">Percentiles are position- and season-specific, computed against the 2025-26 NCAA population.</p>
+    <section class="about-photo" aria-label="Kyle Neuber holding the Kelly Cup">
+      <img src="./kyle-kelly-cup.jpg?v=4" alt="Kyle Neuber holding the Kelly Cup after a championship">
     </section>
-
-    <section class="card">
-      <div class="section-head">
-        <div><p class="eyebrow">FULL REPORT</p><h3>Player analytics</h3></div>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Category</th><th>Metric</th><th>Per-game value</th><th>NCAA Avg</th><th>Percentile</th></tr></thead>
-          <tbody id="metrics"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="card info-grid" id="methodology">
-      <div>
-        <p class="eyebrow">METHODOLOGY</p>
-        <h3>How to read this</h3>
-      </div>
-      <div class="info-copy">
-        <p><strong>Who's included:</strong> only NCAA players flagged as likely in their final year of eligibility (age 22+ or their 4th+ observed NCAA season in our data). This is a heuristic, not a roster fact — class year isn't in the source data, so it's inferred and can be wrong at the margins.</p>
-        <p><strong>Percentiles:</strong> same methodology as the ECHL Player Analytics site — position-specific, season-specific, per-game rates, lower-is-better metrics inverted (Puck Loss Rate, DZ Puck Losses, and similar "against" metrics).</p>
-        <p><strong>Comp matching:</strong> each prospect is compared to historical NCAA seniors on their full percentile profile (metrics both players have data for), restricted to the same position. The 10 closest matches become the comp list.</p>
-        <p><strong>Outcome labels:</strong> comp outcomes come from tracking the same player across every league in our dataset (NCAA, NHL, AHL, ECHL, DEL) by name and date of birth. Only NCAA classes with enough runway to see an outcome (2018-19 through 2023-24) are used as comps.</p>
-        <p><strong>League weighting is tunable:</strong> the Comp Score is a weighted average across comps using an editable league-value scale (NHL > AHL ≈ DEL > ECHL). Changing those weights changes the score, not the underlying comps or probabilities.</p>
-        <p><strong>Read the odds honestly:</strong> across this year's flagged senior class, average NHL probability sits in the low single digits — that's the real base rate, not a bug. Most senior comps land in ECHL/AHL territory or no resolved pro outcome at all.</p>
-        <p><strong>Data source:</strong> InStat player-tracking data, 2018-19 through 2025-26.</p>
-      </div>
-    </section>
-
-    <footer><span>© 2026 Kyle Neuber</span><span>Data sourced from InStat</span></footer>
   </main>
-  <script src="./app.js?v=28"></script>
 </body>
 </html>
