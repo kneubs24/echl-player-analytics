@@ -27,6 +27,44 @@ const OUTCOME_LABEL={
   "NHL":"NHL","AHL":"AHL","DEL":"Europe (DEL)","ECHL":"ECHL","No pro league yet / never":"No pro yet / never"
 };
 
+const LEAGUE_VALUE={"NHL":100,"AHL":65,"DEL":60,"ECHL":30,"No pro league yet / never":0};
+const PRIOR_STRENGTH=20;
+
+function modelOutcomePrior(){
+  const counts={};
+  OUTCOME_ORDER.forEach(k=>counts[k]=0);
+  let total=0;
+  Object.values(PROJECTIONS).forEach(p=>{
+    (p.top_comps||[]).forEach(c=>{
+      const key=c.peak_league || "No pro league yet / never";
+      if(Object.prototype.hasOwnProperty.call(counts,key)){
+        counts[key]++; total++;
+      }
+    });
+  });
+  if(!total){
+    return {"NHL":4,"AHL":19,"DEL":1,"ECHL":31,"No pro league yet / never":45};
+  }
+  const prior={};
+  OUTCOME_ORDER.forEach(k=>prior[k]=100*counts[k]/total);
+  return prior;
+}
+
+function calibratedProjection(proj){
+  if(!proj) return null;
+  const prior=modelOutcomePrior();
+  const n=Number(proj.n_comps)||10;
+  const probs={};
+  OUTCOME_ORDER.forEach(k=>{
+    const raw=Number((proj.outcome_probs||{})[k]||0);
+    const rawCount=raw/100*n;
+    const priorCount=prior[k]/100*PRIOR_STRENGTH;
+    probs[k]=100*(rawCount+priorCount)/(n+PRIOR_STRENGTH);
+  });
+  const score=OUTCOME_ORDER.reduce((sum,k)=>sum + probs[k]/100*(LEAGUE_VALUE[k]||0),0);
+  return {...proj, calibrated_probs:probs, calibrated_score:score, prior};
+}
+
 function field(row,names){for(const n of names){if(Object.prototype.hasOwnProperty.call(row,n)) return row[n];}return "";}
 function fmt(v,metric,percentile=false){
   if(v===null||v===undefined||clean(v)===""||clean(v).toUpperCase()==="N/A") return "N/A";
@@ -59,7 +97,8 @@ function sortRows(rows){
 }
 
 function renderProjection(pkey){
-  const proj=PROJECTIONS[pkey];
+  const rawProj=PROJECTIONS[pkey];
+  const proj=calibratedProjection(rawProj);
   const panel=$("projectionSection");
   if(!proj){
     panel.style.display="none";
@@ -67,20 +106,20 @@ function renderProjection(pkey){
   }
   panel.style.display="";
 
-  $("scoreValue").textContent=proj.weighted_score!==null && proj.weighted_score!==undefined
-    ? proj.weighted_score.toFixed(1) : "—";
+  $("scoreValue").textContent=proj.calibrated_score!==null && proj.calibrated_score!==undefined
+    ? proj.calibrated_score.toFixed(1) : "—";
   $("nCompsNote").textContent=`${proj.n_comps} comps found`;
 
   const bars=$("probabilityBars");
   bars.innerHTML="";
   OUTCOME_ORDER.forEach(key=>{
-    const val=proj.outcome_probs[key]||0;
+    const val=(proj.calibrated_probs&&proj.calibrated_probs[key])||0;
     const row=document.createElement("div");
     row.className="prob-row";
     row.innerHTML=`
       <div class="prob-label">${OUTCOME_LABEL[key]}</div>
       <div class="prob-track"><div class="prob-fill" style="width:${val}%;background:${OUTCOME_COLOR[key]}"></div></div>
-      <div class="prob-pct">${val}%</div>
+      <div class="prob-pct">${Math.round(val)}%</div>
     `;
     bars.appendChild(row);
   });
@@ -165,25 +204,58 @@ function buildPlayerIndex(){
 function allPlayers(){
   return [...new Set(DATA.map(r=>clean(field(r,["Player"]))).filter(Boolean))].sort();
 }
-function positionFilteredPlayers(){
+function filteredPlayers(){
   const pos=$("position").value;
-  return Object.keys(PLAYER_INDEX).filter(p=>pos==="All"||clean(field(PLAYER_INDEX[p],["Position"]))===pos);
+  const team=$("team").value;
+  return Object.keys(PLAYER_INDEX).filter(p=>{
+    const row=PLAYER_INDEX[p];
+    const posMatch=pos==="All" || clean(field(row,["Position"]))===pos;
+    const teamMatch=team==="All" || clean(field(row,["Team"]))===team;
+    return posMatch && teamMatch;
+  });
 }
 function sortedByScorePlayers(){
   const sortMode=$("sortMode").value;
-  let players=positionFilteredPlayers();
+  let players=filteredPlayers();
   if(sortMode==="score"){
     players.sort((a,b)=>{
       const ka=playerKey(a, field(PLAYER_INDEX[a],["DOB"]));
       const kb=playerKey(b, field(PLAYER_INDEX[b],["DOB"]));
-      const sa=(PROJECTIONS[ka]&&PROJECTIONS[ka].weighted_score)||0;
-      const sb=(PROJECTIONS[kb]&&PROJECTIONS[kb].weighted_score)||0;
+      const pa=calibratedProjection(PROJECTIONS[ka]);
+      const pb=calibratedProjection(PROJECTIONS[kb]);
+      const sa=(pa&&pa.calibrated_score)||0;
+      const sb=(pb&&pb.calibrated_score)||0;
       return sb-sa;
     });
   } else {
     players.sort();
   }
   return players;
+}
+
+function teamsForCurrentPosition(){
+  const pos=$("position").value;
+  return [...new Set(
+    Object.values(PLAYER_INDEX)
+      .filter(r=>pos==="All" || clean(field(r,["Position"]))===pos)
+      .map(r=>clean(field(r,["Team"])))
+      .filter(Boolean)
+  )].sort();
+}
+function refreshTeams(){
+  const current=$("team").value || "All";
+  const teams=teamsForCurrentPosition();
+  $("team").innerHTML=['All',...teams].map(t=>`<option value="${t.replace(/"/g,"&quot;")}">${t==="All"?"All Teams":t}</option>`).join("");
+  $("team").value=teams.includes(current)?current:"All";
+}
+function cyclePlayer(direction){
+  const players=sortedByScorePlayers();
+  if(!players.length) return;
+  let idx=players.indexOf($("player").value);
+  if(idx===-1) idx=direction>0?-1:0;
+  idx=(idx+direction+players.length)%players.length;
+  $("player").value=players[idx];
+  render();
 }
 function refreshPlayers(){
   const players=sortedByScorePlayers();
@@ -212,11 +284,26 @@ function resolvePlayerSearch(){
   render();
 }
 
-$("position").addEventListener("change",refreshPlayers);
+$("position").addEventListener("change",()=>{
+  refreshTeams();
+  refreshPlayers();
+});
+$("team").addEventListener("change",refreshPlayers);
 $("sortMode").addEventListener("change",refreshPlayers);
 $("player").addEventListener("change",resolvePlayerSearch);
 $("player").addEventListener("blur",resolvePlayerSearch);
-$("player").addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); resolvePlayerSearch(); } });
+$("player").addEventListener("keydown",e=>{
+  if(e.key==="Enter"){
+    e.preventDefault();
+    resolvePlayerSearch();
+  }else if(e.key==="ArrowDown"){
+    e.preventDefault();
+    cyclePlayer(1);
+  }else if(e.key==="ArrowUp"){
+    e.preventDefault();
+    cyclePlayer(-1);
+  }
+});
 $("player").addEventListener("input",()=>{
   const exact=sortedByScorePlayers().find(p=>p.toLowerCase()===$("player").value.toLowerCase());
   if(exact){ $("player").value=exact; render(); }
@@ -248,13 +335,14 @@ function parseCSV(text){
 }
 
 Promise.all([
-  fetch("./ncaa_report.csv?v=31",{cache:"no-store"}).then(r=>{ if(!r.ok) throw new Error("report fetch failed"); return r.text(); }),
-  fetch("./projections.json?v=31",{cache:"no-store"}).then(r=>{ if(!r.ok) throw new Error("projections fetch failed"); return r.json(); })
+  fetch("./ncaa_report.csv?v=32",{cache:"no-store"}).then(r=>{ if(!r.ok) throw new Error("report fetch failed"); return r.text(); }),
+  fetch("./projections.json?v=32",{cache:"no-store"}).then(r=>{ if(!r.ok) throw new Error("projections fetch failed"); return r.json(); })
 ]).then(([csvText,projJson])=>{
   DATA=parseCSV(csvText);
   PROJECTIONS=projJson;
   if(!DATA.length) throw new Error("report CSV loaded but contained no rows");
   buildPlayerIndex();
+  refreshTeams();
   refreshPlayers();
 }).catch(error=>{
   console.error(error);
