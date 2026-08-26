@@ -76,7 +76,8 @@ function renderTable(rows){
   const ordered=[...rows].sort((a,b)=>ORDER.indexOf(a.Metric)-ORDER.indexOf(b.Metric));
   $("metrics").innerHTML=ordered.map(r=>{
     const p=Math.round(num(r.Percentile)||0);
-    return `<tr><td>${r.Category}</td><td>${r.Metric}</td><td>${fmt(r["Per-game value"])}</td><td>${fmt(r["NCAA Avg"])}</td><td><span class="pct-pill ${p<50?"low":""}">${p}%</span></td></tr>`;
+    const olderP=Math.round(num(r["4th/5th Year Percentile"])||0);
+    return `<tr><td>${r.Category}</td><td>${r.Metric}</td><td>${fmt(r["Per-game value"])}</td><td>${fmt(r["NCAA Avg"])}</td><td><span class="pct-pill ${p<50?"low":""}">${p}%</span></td><td>${fmt(r["4th/5th Year Avg"])}</td><td><span class="pct-pill ${olderP<50?"low":""}">${olderP}%</span></td></tr>`;
   }).join("");
 }
 
@@ -143,8 +144,8 @@ $("player").addEventListener("keydown",e=>{
 $("player").addEventListener("change",resolve);
 
 Promise.all([
-  fetch("./ncaa_final_year_report.csv?v=41").then(r=>{if(!r.ok)throw new Error("report");return r.text();}),
-  fetch("./ncaa_final_year_comps.json?v=41").then(r=>{if(!r.ok)throw new Error("comps");return r.json();})
+  fetch("./ncaa_final_year_report.csv?v=42").then(r=>{if(!r.ok)throw new Error("report");return r.text();}),
+  fetch("./ncaa_final_year_comps.json?v=42").then(r=>{if(!r.ok)throw new Error("comps");return r.json();})
 ]).then(([text,comps])=>{
   DATA=Papa.parse(text,{header:true,skipEmptyLines:true}).data;
   COMPS=comps; buildIndex(); refreshTeams(); refreshPlayers();
