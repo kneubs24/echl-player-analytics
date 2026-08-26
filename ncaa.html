@@ -3,14 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="NCAA senior prospect forecasting — statistical comps and pro-league probability against historical outcomes.">
-  <title>NCAA Prospect Forecast</title>
-  <link rel="stylesheet" href="./ncaa-style.css?v=32">
+  <meta name="description" content="2026-27 NCAA fourth- and fifth-year prospect analytics with historical professional comparables.">
+  <title>NCAA Final-Year Prospects</title>
+  <link rel="stylesheet" href="./ncaa-style.css?v=33">
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
   <main class="wrap analytics-wrap">
     <header class="site-header compact">
-      <a class="brand" href="./ncaa.html">NCAA <span>PROSPECT FORECAST</span></a>
+      <a class="brand" href="./ncaa.html">NCAA <span>FINAL-YEAR PROSPECTS</span></a>
       <nav class="top-nav">
         <a href="./index.html">About Me</a>
         <a href="./analytics.html">ECHL Analytics</a>
@@ -20,21 +21,15 @@
 
     <section class="page-title">
       <div>
-        <p class="eyebrow">SENIOR SCOUTING DATABASE</p>
-        <h1>NCAA Prospect Forecast</h1>
-        <p class="sub">Final-year-eligibility NCAA players only · Statistical comps vs. historical outcomes · Position-specific benchmarks</p>
+        <p class="eyebrow">2026–27 SCOUTING DATABASE</p>
+        <h1>NCAA Final-Year Prospects</h1>
+        <p class="sub">Players entering their 4th or 5th NCAA season · Multi-year statistical profiles · Historical professional comparables</p>
       </div>
     </section>
 
     <section class="controls card" id="controls">
-      <label class="player-search">Player
-        <input id="player" list="players" placeholder="Search prospect" autocomplete="off">
-        <datalist id="players"></datalist>
-      </label>
       <label>Team
-        <select id="team">
-          <option value="All">All Teams</option>
-        </select>
+        <select id="team"><option value="All">All Teams</option></select>
       </label>
       <label>Position
         <select id="position">
@@ -43,13 +38,11 @@
           <option value="D">Defensemen</option>
         </select>
       </label>
-      <label>Sort by
-        <select id="sortMode">
-          <option value="score">Comp score</option>
-          <option value="name">Name</option>
-        </select>
+      <label class="player-search">Player
+        <input id="player" list="players" placeholder="Search prospect" autocomplete="off">
+        <datalist id="players"></datalist>
       </label>
-      <div class="filter-hint">2025-26 season · choose a team to see only that team's prospects. Use ↑ / ↓ in the Player field to move through the filtered player list. Projection probabilities are calibrated toward the model-wide historical outcome base rates to reduce overconfidence from a 10-player comp sample.</div>
+      <div class="filter-hint">Select a team to restrict the player list. Use ↑ / ↓ in the Player field to move through the filtered prospects.</div>
     </section>
 
     <section class="hero card">
@@ -57,7 +50,7 @@
         <p class="eyebrow">QUICK PROFILE</p>
         <h2 id="playerName">Loading…</h2>
         <p id="playerMeta" class="sub"></p>
-        <span class="badge-age" id="ageBadge"></span>
+        <span class="badge-age" id="yearBadge"></span>
       </div>
       <div class="stats season-stats">
         <div><span>GP</span><strong id="gp">—</strong></div>
@@ -70,33 +63,20 @@
 
     <section class="card" id="projectionSection">
       <div class="section-head">
-        <div><p class="eyebrow">PROJECTION</p><h3>Pro league forecast</h3></div>
-        <span class="note" id="nCompsNote"></span>
+        <div><p class="eyebrow">HISTORICAL COMPARABLES</p><h3>Similar NCAA profiles that turned pro</h3></div>
+        <span class="note" id="compNote">Up to 5 credible matches</span>
       </div>
-      <div class="projection-grid">
-        <div>
-          <div class="score-panel">
-            <div class="score-value" id="scoreValue">—</div>
-            <div class="score-label">Comp Score</div>
-            <div class="score-sub">Weighted average outcome value across the 10 nearest historical comps. Higher = comps skew toward higher pro tiers.</div>
-          </div>
-          <div class="probability-bars" id="probabilityBars"></div>
-        </div>
-        <div class="comps-panel">
-          <h4 style="margin:0 0 10px;font-size:15px;color:#dbe6f4">Statistical comps</h4>
-          <div class="comps-list" id="compsList"></div>
-        </div>
-      </div>
-      <p class="chart-note">Comps are historical NCAA seniors (2018-19 through 2023-24 classes) with a resolved pro outcome, matched on a 29-metric percentile profile within the same position. "No pro yet / never" includes players who may still sign in an untracked league — it is not a judgment on their hockey career.</p>
+      <div class="comps-list" id="compsList"></div>
+      <p class="chart-note">Comparables use the player's last three NCAA seasons when available, weighted 60% most recent, 25% previous, and 15% third-most-recent. Only same-position historical NCAA players who later appeared in the AHL, DEL, or ECHL are eligible. A comparable is not forced when the statistical match is weak.</p>
     </section>
 
     <section class="card">
       <div class="section-head">
         <div><p class="eyebrow">PERCENTILE SNAPSHOT</p><h3>Player impact profile</h3></div>
-        <span class="note">Higher percentile = stronger result, vs. NCAA senior peers</span>
+        <span class="note">Higher percentile = stronger result, vs. 2025–26 NCAA 4th/5th-year cohort</span>
       </div>
       <div class="percentile-grid" id="profileSnapshot"></div>
-      <p class="chart-note">Percentiles are position- and season-specific, computed against the 2025-26 NCAA population.</p>
+      <p class="chart-note">Percentiles are position-specific within the 2025–26 fourth/fifth-year cohort.</p>
     </section>
 
     <section class="card">
@@ -112,24 +92,18 @@
     </section>
 
     <section class="card info-grid" id="methodology">
-      <div>
-        <p class="eyebrow">METHODOLOGY</p>
-        <h3>How to read this</h3>
-      </div>
+      <div><p class="eyebrow">METHODOLOGY</p><h3>How to read this</h3></div>
       <div class="info-copy">
-        <p><strong>Who's included:</strong> only NCAA players flagged as likely in their final year of eligibility (age 22+ or their 4th+ observed NCAA season in our data). This is a heuristic, not a roster fact — class year isn't in the source data, so it's inferred and can be wrong at the margins.</p>
-        <p><strong>Percentiles:</strong> same methodology as the ECHL Player Analytics site — position-specific, season-specific, per-game rates, lower-is-better metrics inverted (Puck Loss Rate, DZ Puck Losses, and similar "against" metrics).</p>
-        <p><strong>Comp matching:</strong> each prospect is compared to historical NCAA seniors on their full percentile profile (metrics both players have data for), restricted to the same position. The 10 closest matches become the comp list.</p>
-        <p><strong>Probability calibration:</strong> raw outcomes from only 10 comps can look overly confident (for example, 6 NHL comps would otherwise display as 60%). The displayed league probabilities are therefore shrunk toward the overall historical outcome mix represented in the model, using a 20-comp prior. This preserves the direction of the comp signal while producing more realistic probabilities.</p>
-        <p><strong>Outcome labels:</strong> comp outcomes come from tracking the same player across every league in our dataset (NCAA, NHL, AHL, ECHL, DEL) by name and date of birth. Only NCAA classes with enough runway to see an outcome (2018-19 through 2023-24) are used as comps.</p>
-        <p><strong>League weighting is tunable:</strong> the Comp Score is a weighted average across comps using an editable league-value scale (NHL > AHL ≈ DEL > ECHL). Changing those weights changes the score, not the underlying comps or probabilities.</p>
-        <p><strong>Read the odds honestly:</strong> across this year's flagged senior class, average NHL probability sits in the low single digits — that's the real base rate, not a bug. Most senior comps land in ECHL/AHL territory or no resolved pro outcome at all.</p>
-        <p><strong>Data source:</strong> InStat player-tracking data, 2018-19 through 2025-26.</p>
+        <p><strong>Who's included:</strong> players in the 2025–26 NCAA data with at least 10 GP who have three or four observed NCAA seasons in the 2018–19 through 2025–26 dataset. They therefore enter 2026–27 as a 4th- or 5th-year NCAA player in this database.</p>
+        <p><strong>Eligibility caveat:</strong> this is a data-defined 4th/5th-year cohort, not an official NCAA eligibility certification. NCAA transition rules can make individual eligibility differ.</p>
+        <p><strong>Current-season percentiles:</strong> position-specific within this cohort. Lower-is-better Puck Loss Rate is inverted so higher percentile always means better.</p>
+        <p><strong>Historical comparable profile:</strong> 11 standardized metrics are combined across up to three NCAA seasons. The most recent season receives 60% weight, the previous season 25%, and the third-most-recent 15%.</p>
+        <p><strong>Professional comparables:</strong> only same-position historical NCAA players who subsequently appeared in the AHL, DEL, or ECHL are considered. Up to five are displayed. Players with fewer than eight points in 2025–26 or without a sufficiently close statistical match receive no forced comparable.</p>
       </div>
     </section>
 
     <footer><span>© 2026 Kyle Neuber</span><span>Data sourced from InStat</span></footer>
   </main>
-  <script src="./ncaa-app.js?v=32"></script>
+  <script src="./ncaa-app.js?v=33"></script>
 </body>
 </html>

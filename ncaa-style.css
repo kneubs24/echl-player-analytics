@@ -44,7 +44,7 @@ a{color:inherit}
 .card{background:rgba(17,28,44,.96);border:1px solid var(--line);border-radius:12px;padding:18px;margin:14px 0}
 .controls{
   display:grid;
-  grid-template-columns:minmax(280px,1fr) 220px 150px 130px;
+  grid-template-columns:minmax(280px,1fr) 150px 130px;
   gap:16px;
 }
 .controls label{font-size:11px;font-weight:900;color:var(--muted);display:flex;flex-direction:column;gap:7px}
@@ -121,3 +121,13 @@ footer{display:flex;justify-content:space-between;color:#71839b;font-size:12px;p
   .section-head{display:block}
   .info-grid{grid-template-columns:1fr}
 }
+
+/* v33 final-year prospect database */
+.controls{grid-template-columns:240px 150px minmax(300px,1fr) !important}
+.comps-list{display:grid;gap:10px}
+.comp-row{display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:center;padding:12px 14px;border:1px solid #24354b;border-radius:12px;background:#101b29}
+.comp-rank{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:#17324e;font-weight:800}
+.comp-meta,.comp-outcome small{display:block;color:#8191a5;font-size:12px;margin-top:3px}
+.comp-outcome{text-align:right;font-weight:800}
+.comp-outcome span{display:block;color:#dbe6f4}
+@media(max-width:760px){.controls{grid-template-columns:1fr !important}.comp-row{grid-template-columns:30px 1fr}.comp-outcome{grid-column:2;text-align:left}}
