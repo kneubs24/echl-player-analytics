@@ -55,17 +55,28 @@ function renderComps(k){
   const c=COMPS[k];
   const list=$("compsList");
   if(!c || !c.comps || !c.comps.length){
-    list.innerHTML=`<div class="comp-row"><div><strong>No strong professional comparable identified</strong><div class="comp-meta">The model does not force a match when the profile is too weak or too dissimilar from historical players who turned pro.</div></div></div>`;
+    list.innerHTML=`<div class="no-comp"><strong>No strong professional comparable identified</strong><span>No sufficiently close historical pro match for this profile.</span></div>`;
     $("compNote").textContent="No forced match";
     return;
   }
   $("compNote").textContent=`${c.comps.length} credible match${c.comps.length===1?"":"es"}`;
-  list.innerHTML=c.comps.map((x,i)=>`
-    <div class="comp-row">
-      <div class="comp-rank">${i+1}</div>
-      <div><strong>${x.player}</strong><div class="comp-meta">${x.ncaa_team} · last NCAA ${x.last_ncaa}</div></div>
-      <div class="comp-outcome"><span>${x.pro_league}</span><small>${x.pro_season} · ${x.pro_gp} GP</small></div>
-    </div>`).join("");
+  list.innerHTML=c.comps.map((x,i)=>{
+    const stats=(x.ncaa_stats||[]).map(s=>`
+      <div class="comp-season">
+        <span class="comp-season-name">${s.season} · ${s.team}</span>
+        <span><b>${s.gp}</b> GP</span><span><b>${s.g??"—"}</b> G</span>
+        <span><b>${s.a??"—"}</b> A</span><span><b>${s.pts??"—"}</b> PTS</span>
+        <span><b>${s.xg_pg??"—"}</b> xG/G</span><span><b>${s.shots_pg??"—"}</b> SH/G</span>
+      </div>`).join("");
+    return `<div class="comp-card">
+      <div class="comp-main">
+        <div class="comp-rank">${i+1}</div>
+        <div><strong>${x.player}</strong><div class="comp-meta">${x.ncaa_team} · last NCAA ${x.last_ncaa}</div></div>
+        <div class="comp-outcome"><span>${x.pro_league}</span><small>Primary pro league · ${x.pro_gp} GP in dataset</small></div>
+      </div>
+      <div class="comp-stats">${stats}</div>
+    </div>`;
+  }).join("");
 }
 function renderSnapshot(rows){
   const by=Object.fromEntries(rows.map(r=>[r.Metric,r]));

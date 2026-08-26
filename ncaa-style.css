@@ -131,3 +131,27 @@ footer{display:flex;justify-content:space-between;color:#71839b;font-size:12px;p
 .comp-outcome{text-align:right;font-weight:800}
 .comp-outcome span{display:block;color:#dbe6f4}
 @media(max-width:760px){.controls{grid-template-columns:1fr !important}.comp-row{grid-template-columns:30px 1fr}.comp-outcome{grid-column:2;text-align:left}}
+
+/* v34 comparable cards + snapshot layout repair */
+.comps-list{display:grid;grid-template-columns:1fr;gap:12px;width:100%}
+.comp-card{display:block;width:100%;padding:14px;border:1px solid #24354b;border-radius:12px;background:#101b29;box-sizing:border-box}
+.comp-main{display:grid;grid-template-columns:34px minmax(180px,1fr) auto;gap:12px;align-items:center}
+.comp-stats{margin-top:12px;padding-top:10px;border-top:1px solid #24354b;display:grid;gap:6px}
+.comp-season{display:grid;grid-template-columns:minmax(190px,1.6fr) repeat(6,minmax(52px,.55fr));gap:10px;align-items:center;font-size:12px;color:#9fb0c5}
+.comp-season-name{color:#dbe6f4;font-weight:700}
+.comp-season b{color:#f5f7fb}
+.no-comp{display:flex;flex-direction:column;gap:5px;width:100%;padding:14px;border:1px solid #24354b;border-radius:12px;background:#101b29;box-sizing:border-box}
+.no-comp span{color:#8191a5;font-size:13px}
+#profileSnapshot{display:grid !important;grid-template-columns:repeat(4,minmax(0,1fr)) !important;gap:14px !important;width:100% !important}
+.percentile-card-box{min-width:0 !important;width:auto !important;height:126px !important;display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;text-align:center !important;padding:12px !important;box-sizing:border-box !important;overflow:hidden !important}
+.percentile-card-box span{display:block !important;font-size:13px !important;line-height:1.15 !important;font-weight:700 !important;white-space:normal !important;margin-bottom:10px !important}
+.percentile-card-box strong{display:block !important;font-size:38px !important;line-height:1 !important;white-space:nowrap !important}
+@media(max-width:900px){
+ #profileSnapshot{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+ .comp-season{grid-template-columns:1fr repeat(3,minmax(45px,.5fr))}
+ .comp-season span:nth-child(n+5){display:none}
+}
+@media(max-width:600px){
+ #profileSnapshot{grid-template-columns:1fr 1fr !important}
+ .comp-main{grid-template-columns:30px 1fr}.comp-outcome{grid-column:2;text-align:left}
+}
