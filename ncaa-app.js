@@ -71,7 +71,7 @@ function renderComps(k){
     return `<div class="comp-card">
       <div class="comp-main">
         <div class="comp-rank">${i+1}</div>
-        <div><strong>${x.player}</strong><div class="comp-meta">${x.ncaa_team} · last NCAA ${x.last_ncaa}</div></div>
+        <div><strong>${x.player}</strong><div class="comp-meta">${x.ncaa_team} · ${x.height}${x.weight?` · ${x.weight} lbs`:""} · last NCAA ${x.last_ncaa}</div></div>
         <div class="comp-outcome"><span>${x.pro_league}</span><small>Primary pro league · ${x.pro_gp} GP in dataset</small></div>
       </div>
       <div class="comp-stats">${stats}</div>
@@ -82,7 +82,10 @@ function renderSnapshot(rows){
   const by=Object.fromEntries(rows.map(r=>[r.Metric,r]));
   $("profileSnapshot").innerHTML=SNAPSHOT.filter(m=>by[m]).map(m=>{
     const p=Math.round(num(by[m].Percentile)||0);
-    return `<div class="percentile-card-box ${p<50?"low":""}"><span>${m}</span><strong>${p}%</strong></div>`;
+    return `<div class="ncaa-snapshot-card ${p<50?"low":""}">
+      <div class="ncaa-snapshot-label">${m}</div>
+      <div class="ncaa-snapshot-value">${p}%</div>
+    </div>`;
   }).join("");
 }
 function renderTable(rows){
@@ -156,8 +159,8 @@ $("player").addEventListener("keydown",e=>{
 $("player").addEventListener("change",resolve);
 
 Promise.all([
-  fetch("./ncaa_final_year_report.csv?v=36").then(r=>{if(!r.ok)throw new Error("report");return r.text();}),
-  fetch("./ncaa_final_year_comps.json?v=36").then(r=>{if(!r.ok)throw new Error("comps");return r.json();})
+  fetch("./ncaa_final_year_report.csv?v=38").then(r=>{if(!r.ok)throw new Error("report");return r.text();}),
+  fetch("./ncaa_final_year_comps.json?v=38").then(r=>{if(!r.ok)throw new Error("comps");return r.json();})
 ]).then(([text,comps])=>{
   DATA=Papa.parse(text,{header:true,skipEmptyLines:true}).data;
   COMPS=comps; buildIndex(); refreshTeams(); refreshPlayers();

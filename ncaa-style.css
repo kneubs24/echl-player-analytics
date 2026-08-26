@@ -160,3 +160,65 @@ footer{display:flex;justify-content:space-between;color:#71839b;font-size:12px;p
 .player-details{display:flex;flex-wrap:wrap;gap:7px;margin:9px 0 2px}
 .detail-chip{display:inline-flex;align-items:center;min-height:27px;padding:5px 9px;border:1px solid #28415e;border-radius:999px;background:#0b1625;color:#dbe6f4;font-size:12px;font-weight:750}
 .country-chip{gap:4px}
+
+/* v37 — isolated NCAA snapshot layout; do not reuse legacy ECHL percentile classes */
+#profileSnapshot{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:16px !important;
+  width:100% !important;
+  margin-top:18px !important;
+  align-items:stretch !important;
+}
+#profileSnapshot .ncaa-snapshot-card{
+  min-width:0 !important;
+  height:132px !important;
+  padding:16px 10px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+  align-items:center !important;
+  text-align:center !important;
+  border:1px solid #3b6d95 !important;
+  border-radius:10px !important;
+  background:#1d5d8d !important;
+  box-sizing:border-box !important;
+  overflow:hidden !important;
+}
+#profileSnapshot .ncaa-snapshot-card.low{
+  background:#8a4650 !important;
+  border-color:#a65a64 !important;
+}
+#profileSnapshot .ncaa-snapshot-label{
+  width:100% !important;
+  min-height:34px !important;
+  display:flex !important;
+  align-items:flex-end !important;
+  justify-content:center !important;
+  margin:0 0 10px !important;
+  padding:0 4px !important;
+  color:#dbe6f4 !important;
+  font-size:14px !important;
+  line-height:1.15 !important;
+  font-weight:800 !important;
+  letter-spacing:0 !important;
+  white-space:normal !important;
+  overflow-wrap:normal !important;
+  word-break:normal !important;
+}
+#profileSnapshot .ncaa-snapshot-value{
+  width:100% !important;
+  color:#fff !important;
+  font-size:40px !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+  letter-spacing:-1px !important;
+  white-space:nowrap !important;
+}
+@media(max-width:1000px){
+  #profileSnapshot{grid-template-columns:repeat(3,minmax(0,1fr)) !important;}
+}
+@media(max-width:700px){
+  #profileSnapshot{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}
+  #profileSnapshot .ncaa-snapshot-value{font-size:34px !important;}
+}
