@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="2026-27 NCAA fourth- and fifth-year prospect analytics with historical professional comparables.">
   <title>NCAA Final-Year Prospects</title>
-  <link rel="stylesheet" href="./ncaa-style.css?v=47">
+  <link rel="stylesheet" href="./ncaa-style.css?v=48">
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
@@ -90,8 +90,19 @@
         </table>
       </div>
     </section>
+<section class="card info-grid" id="methodology">
+      <div><p class="eyebrow">METHODOLOGY</p><h3>How to read this</h3></div>
+      <div class="info-copy">
+        <p><strong>Who's included:</strong> players in the 2025–26 NCAA data with at least 10 GP who have three or four observed NCAA seasons in the 2018–19 through 2025–26 dataset. They therefore enter 2026–27 as a 4th- or 5th-year NCAA player in this database.</p>
+        <p><strong>Eligibility caveat:</strong> this is a data-defined 4th/5th-year cohort, not an official NCAA eligibility certification. NCAA transition rules can make individual eligibility differ.</p>
+        <p><strong>Current-season percentiles:</strong> position-specific within this cohort. Lower-is-better Puck Loss Rate is inverted so higher percentile always means better.</p>
+        <p><strong>Historical comparable profile:</strong> 11 standardized metrics are combined across up to three NCAA seasons. The most recent season receives 60% weight, the previous season 25%, and the third-most-recent 15%.</p>
+        <p><strong>Professional comparables:</strong> only same-position historical NCAA players who subsequently appeared in the AHL, DEL, or ECHL are considered. Up to five are displayed. Players with fewer than eight points in 2025–26 or without a sufficiently close statistical match receive no forced comparable.</p>
+      </div>
+    </section>
 
-
+    <footer><span>© 2026 Kyle Neuber</span><span>Data sourced from InStat</span></footer>
+  
     <section class="card" id="quickScouting">
       <div class="section-head">
         <div>
@@ -106,19 +117,7 @@
       <div class="quick-scout-list" id="quickScoutList"></div>
     </section>
 
-    <section class="card info-grid" id="methodology">
-      <div><p class="eyebrow">METHODOLOGY</p><h3>How to read this</h3></div>
-      <div class="info-copy">
-        <p><strong>Who's included:</strong> players in the 2025–26 NCAA data with at least 10 GP who have three or four observed NCAA seasons in the 2018–19 through 2025–26 dataset. They therefore enter 2026–27 as a 4th- or 5th-year NCAA player in this database.</p>
-        <p><strong>Eligibility caveat:</strong> this is a data-defined 4th/5th-year cohort, not an official NCAA eligibility certification. NCAA transition rules can make individual eligibility differ.</p>
-        <p><strong>Current-season percentiles:</strong> position-specific within this cohort. Lower-is-better Puck Loss Rate is inverted so higher percentile always means better.</p>
-        <p><strong>Historical comparable profile:</strong> 11 standardized metrics are combined across up to three NCAA seasons. The most recent season receives 60% weight, the previous season 25%, and the third-most-recent 15%.</p>
-        <p><strong>Professional comparables:</strong> only same-position historical NCAA players who subsequently appeared in the AHL, DEL, or ECHL are considered. Up to five are displayed. Players with fewer than eight points in 2025–26 or without a sufficiently close statistical match receive no forced comparable.</p>
-      </div>
-    </section>
-
-    <footer><span>© 2026 Kyle Neuber</span><span>Data sourced from InStat</span></footer>
   </main>
-  <script src="./ncaa-app.js?v=47"></script>
+  <script src="./ncaa-app.js?v=48"></script>
 </body>
 </html>
