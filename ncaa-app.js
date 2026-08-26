@@ -52,6 +52,19 @@ function cyclePlayer(dir){
 }
 function rowsFor(k){return DATA.filter(r=>clean(r.player_key)===k);}
 
+
+// League-adjusted scoring: Network NHLe factors.
+// This lets an ECHL point and an AHL/NHL point carry different value.
+const PRO_LEAGUE_FACTOR={NHL:1.000,AHL:0.389,DEL:0.352,ECHL:0.147};
+function adjustedProPPG(league,pts,gp){
+  const p=num(pts), g=num(gp), f=PRO_LEAGUE_FACTOR[clean(league).toUpperCase()];
+  if(p===null||g===null||g<=0||!f) return null;
+  return (p/g)*f;
+}
+function adjFmt(v){
+  return v===null||!Number.isFinite(v)?"—":v.toFixed(3);
+}
+
 function renderNhlComparable(c){
   if(!c||!c.nhl_stats) return "";
   const s=(c.ncaa_stats&&c.ncaa_stats.length)?c.ncaa_stats[0]:{};
@@ -65,7 +78,7 @@ function renderNhlComparable(c){
         <div class="comp-pro"><b>NHL</b><span>${n.career_gp} career GP</span></div>
       </div>
       <div class="comp-ncaa"><b>${s.season||c.last_ncaa} · ${s.team||c.ncaa_team}</b><span>${fmt(s.gp)} GP</span><span>${fmt(s.g)} G</span><span>${fmt(s.a)} A</span><span>${fmt(s.pts)} PTS</span><span>${fmt(s.xg_pg)} xG/G</span><span>${fmt(s.shots_pg)} SH/G</span></div>
-      <div class="recent-pro"><span class="tag">NHL</span><span>${n.season} · ${n.team}</span><b>${n.gp} GP</b><b>${n.g} G</b><b>${n.a} A</b><b>${n.pts} PTS</b></div>
+      <div class="recent-pro"><span class="tag">NHL</span><span>${n.season} · ${n.team}</span><b>${n.gp} GP</b><b>${n.g} G</b><b>${n.a} A</b><b>${n.pts} PTS</b><b class="adj-pro" title="League-adjusted points per game (NHLe)">Adj ${adjFmt(adjustedProPPG("NHL",n.pts,n.gp))}</b></div>
     </div>
   </div>`;
 }
@@ -78,7 +91,7 @@ function renderComps(k){
  list.innerHTML=nhlCard+c.comps.map((x,i)=>{
   const s=(x.ncaa_stats||[])[0],p=x.recent_pro;
   const ncaa=s?`<div class="comp-stat-line"><span class="stat-season">${s.season} · ${s.team}</span><span><b>${s.gp}</b> GP</span><span><b>${s.g??"—"}</b> G</span><span><b>${s.a??"—"}</b> A</span><span><b>${s.pts??"—"}</b> PTS</span><span><b>${s.xg_pg??"—"}</b> xG/G</span><span><b>${s.shots_pg??"—"}</b> SH/G</span></div>`:"";
-  const pro=p?`<div class="comp-pro-line"><span class="pro-label">Recent pro</span><span class="pro-league">${p.league}</span><span>${p.season}${p.team?` · ${p.team}`:""}</span><span><b>${p.gp}</b> GP</span><span><b>${p.g??"—"}</b> G</span><span><b>${p.a??"—"}</b> A</span><span><b>${p.pts??"—"}</b> PTS</span></div>`:`<div class="comp-pro-line muted">No 30+ GP pro season in dataset</div>`;
+  const pro=p?`<div class="comp-pro-line"><span class="pro-label">Recent pro</span><span class="pro-league">${p.league}</span><span>${p.season}${p.team?` · ${p.team}`:""}</span><span><b>${p.gp}</b> GP</span><span><b>${p.g??"—"}</b> G</span><span><b>${p.a??"—"}</b> A</span><span><b>${p.pts??"—"}</b> PTS</span><span class="adj-pro" title="League-adjusted points per game (NHLe)"><b>Adj ${adjFmt(adjustedProPPG(p.league,p.pts,p.gp))}</b></span></div>`:`<div class="comp-pro-line muted">No 30+ GP pro season in dataset</div>`;
   return `<div class="comp-card"><div class="comp-main"><div class="comp-rank">${i+1}</div><div><strong>${x.player}</strong><div class="comp-bio">${x.position||c.position} · ${x.height||"—"}${x.weight?` · ${x.weight} lbs`:""}</div></div><div class="comp-outcome"><span>${x.pro_league}</span><small>Primary pro league · ${x.pro_gp} GP in dataset</small></div></div><div class="comp-detail-lines">${ncaa}${pro}</div></div>`;
  }).join("");
 }
@@ -225,8 +238,8 @@ $("scoutingMetric").addEventListener("change",renderQuickScouting);
 $("scoutingPosition").addEventListener("change",renderQuickScouting);
 
 Promise.all([
-  fetch("./ncaa_final_year_report.csv?v=50").then(r=>{if(!r.ok)throw new Error("report");return r.text();}),
-  fetch("./ncaa_final_year_comps.json?v=50").then(r=>{if(!r.ok)throw new Error("comps");return r.json();})
+  fetch("./ncaa_final_year_report.csv?v=51").then(r=>{if(!r.ok)throw new Error("report");return r.text();}),
+  fetch("./ncaa_final_year_comps.json?v=51").then(r=>{if(!r.ok)throw new Error("comps");return r.json();})
 ]).then(([text,comps])=>{
   DATA=Papa.parse(text,{header:true,skipEmptyLines:true}).data;
   COMPS=comps; buildIndex(); refreshTeams(); refreshPlayers(); populateScoutingMetrics(); renderQuickScouting();
