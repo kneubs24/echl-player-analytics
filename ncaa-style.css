@@ -222,3 +222,12 @@ footer{display:flex;justify-content:space-between;color:#71839b;font-size:12px;p
   #profileSnapshot{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}
   #profileSnapshot .ncaa-snapshot-value{font-size:34px !important;}
 }
+
+/* v39 compact comparable detail */
+.comp-bio{margin-top:3px;color:#8ea2ba;font-size:12px;font-weight:650}
+.comp-detail-lines{margin-top:11px;border-top:1px solid #24354b;padding-top:9px;display:grid;gap:7px}
+.comp-stat-line{display:grid;grid-template-columns:minmax(180px,1.45fr) repeat(6,minmax(52px,.55fr));gap:10px;align-items:center;color:#a9b8c9;font-size:12px}
+.comp-pro-line{display:grid;grid-template-columns:85px 45px minmax(180px,1.2fr) repeat(4,minmax(48px,.5fr));gap:10px;align-items:center;color:#a9b8c9;font-size:12px;background:#0c1724;border-radius:8px;padding:7px 9px}
+.comp-stat-line b,.comp-pro-line b{color:#fff}.stat-season{color:#dbe6f4;font-weight:800}
+.pro-label{color:#7f92aa;text-transform:uppercase;font-size:10px;font-weight:850}.pro-league{color:#4ea3ff;font-weight:900}
+.comp-pro-line.muted{display:block;color:#71839a}

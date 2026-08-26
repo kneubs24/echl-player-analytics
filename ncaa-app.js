@@ -52,31 +52,15 @@ function cyclePlayer(dir){
 }
 function rowsFor(k){return DATA.filter(r=>clean(r.player_key)===k);}
 function renderComps(k){
-  const c=COMPS[k];
-  const list=$("compsList");
-  if(!c || !c.comps || !c.comps.length){
-    list.innerHTML=`<div class="no-comp"><strong>No strong professional comparable identified</strong><span>No sufficiently close historical pro match for this profile.</span></div>`;
-    $("compNote").textContent="No forced match";
-    return;
-  }
-  $("compNote").textContent=`${c.comps.length} credible match${c.comps.length===1?"":"es"}`;
-  list.innerHTML=c.comps.map((x,i)=>{
-    const stats=(x.ncaa_stats||[]).map(s=>`
-      <div class="comp-season">
-        <span class="comp-season-name">${s.season} · ${s.team}</span>
-        <span><b>${s.gp}</b> GP</span><span><b>${s.g??"—"}</b> G</span>
-        <span><b>${s.a??"—"}</b> A</span><span><b>${s.pts??"—"}</b> PTS</span>
-        <span><b>${s.xg_pg??"—"}</b> xG/G</span><span><b>${s.shots_pg??"—"}</b> SH/G</span>
-      </div>`).join("");
-    return `<div class="comp-card">
-      <div class="comp-main">
-        <div class="comp-rank">${i+1}</div>
-        <div><strong>${x.player}</strong><div class="comp-meta">${x.ncaa_team} · ${x.height}${x.weight?` · ${x.weight} lbs`:""} · last NCAA ${x.last_ncaa}</div></div>
-        <div class="comp-outcome"><span>${x.pro_league}</span><small>Primary pro league · ${x.pro_gp} GP in dataset</small></div>
-      </div>
-      <div class="comp-stats">${stats}</div>
-    </div>`;
-  }).join("");
+ const c=COMPS[k],list=$("compsList");
+ if(!c||!c.comps||!c.comps.length){list.innerHTML=`<div class="no-comp"><strong>No strong professional comparable identified</strong><span>No sufficiently close historical pro match for this profile.</span></div>`;$("compNote").textContent="No forced match";return;}
+ $("compNote").textContent=`${c.comps.length} credible match${c.comps.length===1?"":"es"}`;
+ list.innerHTML=c.comps.map((x,i)=>{
+  const s=(x.ncaa_stats||[])[0],p=x.recent_pro;
+  const ncaa=s?`<div class="comp-stat-line"><span class="stat-season">${s.season} · ${s.team}</span><span><b>${s.gp}</b> GP</span><span><b>${s.g??"—"}</b> G</span><span><b>${s.a??"—"}</b> A</span><span><b>${s.pts??"—"}</b> PTS</span><span><b>${s.xg_pg??"—"}</b> xG/G</span><span><b>${s.shots_pg??"—"}</b> SH/G</span></div>`:"";
+  const pro=p?`<div class="comp-pro-line"><span class="pro-label">Recent pro</span><span class="pro-league">${p.league}</span><span>${p.season}${p.team?` · ${p.team}`:""}</span><span><b>${p.gp}</b> GP</span><span><b>${p.g??"—"}</b> G</span><span><b>${p.a??"—"}</b> A</span><span><b>${p.pts??"—"}</b> PTS</span></div>`:`<div class="comp-pro-line muted">No 30+ GP pro season in dataset</div>`;
+  return `<div class="comp-card"><div class="comp-main"><div class="comp-rank">${i+1}</div><div><strong>${x.player}</strong><div class="comp-bio">${x.position||c.position} · ${x.height||"—"}${x.weight?` · ${x.weight} lbs`:""}</div></div><div class="comp-outcome"><span>${x.pro_league}</span><small>Primary pro league · ${x.pro_gp} GP in dataset</small></div></div><div class="comp-detail-lines">${ncaa}${pro}</div></div>`;
+ }).join("");
 }
 function renderSnapshot(rows){
   const by=Object.fromEntries(rows.map(r=>[r.Metric,r]));
@@ -159,8 +143,8 @@ $("player").addEventListener("keydown",e=>{
 $("player").addEventListener("change",resolve);
 
 Promise.all([
-  fetch("./ncaa_final_year_report.csv?v=38").then(r=>{if(!r.ok)throw new Error("report");return r.text();}),
-  fetch("./ncaa_final_year_comps.json?v=38").then(r=>{if(!r.ok)throw new Error("comps");return r.json();})
+  fetch("./ncaa_final_year_report.csv?v=39").then(r=>{if(!r.ok)throw new Error("report");return r.text();}),
+  fetch("./ncaa_final_year_comps.json?v=39").then(r=>{if(!r.ok)throw new Error("comps");return r.json();})
 ]).then(([text,comps])=>{
   DATA=Papa.parse(text,{header:true,skipEmptyLines:true}).data;
   COMPS=comps; buildIndex(); refreshTeams(); refreshPlayers();
