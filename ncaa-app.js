@@ -129,6 +129,63 @@ function handLabel(v){
   return h ? `Shoots ${clean(v)}` : "";
 }
 
+
+const SCOUTING_METRICS=[
+  "Points","Goals","Assists","Expected Goals","Scoring Chances","Inner Slot Shots",
+  "Shots on Goal","CORSI For %","xG For %","Puck Loss Rate","Hits","TOI"
+];
+
+function populateScoutingMetrics(){
+  $("scoutingMetric").innerHTML=SCOUTING_METRICS.map(m=>`<option value="${m}">${m}</option>`).join("");
+  $("scoutingMetric").value="Points";
+}
+
+function renderQuickScouting(){
+  const metricName=$("scoutingMetric").value;
+  const rows=DATA.filter(r=>clean(r.Metric)===metricName);
+  const onePerPlayer=new Map();
+
+  rows.forEach(r=>{
+    const key=clean(r.player_key);
+    if(!key) return;
+    const value=num(r["Per-game value"]);
+    const classPct=num(r["4th/5th Year Percentile"]);
+    const ncaaPct=num(r.Percentile);
+    if(value===null || classPct===null) return;
+    onePerPlayer.set(key,{...r,value,classPct,ncaaPct});
+  });
+
+  let ranked=[...onePerPlayer.values()];
+  ranked.sort((a,b)=>{
+    // The percentile is already inverted for lower-is-better metrics such as Puck Loss Rate.
+    if(b.classPct!==a.classPct) return b.classPct-a.classPct;
+    return metricName==="Puck Loss Rate" ? a.value-b.value : b.value-a.value;
+  });
+  ranked=ranked.slice(0,5);
+
+  $("quickScoutList").innerHTML=ranked.map((r,i)=>`
+    <div class="quick-scout-row">
+      <div class="quick-rank">${i+1}</div>
+      <div class="quick-player">
+        <strong>${r.Player}</strong>
+        <span>${r.Position} · ${r.Team}</span>
+      </div>
+      <div class="quick-value">
+        <span>${metricName}</span>
+        <strong>${fmt(r.value)}</strong>
+      </div>
+      <div class="quick-pct">
+        <span>4th/5th Year</span>
+        <strong>${Math.round(r.classPct)}%</strong>
+      </div>
+      <div class="quick-pct secondary">
+        <span>NCAA</span>
+        <strong>${Math.round(r.ncaaPct||0)}%</strong>
+      </div>
+    </div>
+  `).join("");
+}
+
 function render(){
   const k=currentKey(); if(!k)return;
   const rows=rowsFor(k); if(!rows.length)return;
@@ -163,12 +220,14 @@ $("player").addEventListener("keydown",e=>{
 });
 $("player").addEventListener("change",resolve);
 
+$("scoutingMetric").addEventListener("change",renderQuickScouting);
+
 Promise.all([
-  fetch("./ncaa_final_year_report.csv?v=46").then(r=>{if(!r.ok)throw new Error("report");return r.text();}),
-  fetch("./ncaa_final_year_comps.json?v=46").then(r=>{if(!r.ok)throw new Error("comps");return r.json();})
+  fetch("./ncaa_final_year_report.csv?v=47").then(r=>{if(!r.ok)throw new Error("report");return r.text();}),
+  fetch("./ncaa_final_year_comps.json?v=47").then(r=>{if(!r.ok)throw new Error("comps");return r.json();})
 ]).then(([text,comps])=>{
   DATA=Papa.parse(text,{header:true,skipEmptyLines:true}).data;
-  COMPS=comps; buildIndex(); refreshTeams(); refreshPlayers();
+  COMPS=comps; buildIndex(); refreshTeams(); refreshPlayers(); populateScoutingMetrics(); renderQuickScouting();
 }).catch(err=>{
   $("playerName").textContent="Data failed to load";
   console.error(err);

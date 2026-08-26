@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="2026-27 NCAA fourth- and fifth-year prospect analytics with historical professional comparables.">
   <title>NCAA Final-Year Prospects</title>
-  <link rel="stylesheet" href="./ncaa-style.css?v=46">
+  <link rel="stylesheet" href="./ncaa-style.css?v=47">
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
@@ -91,6 +91,21 @@
       </div>
     </section>
 
+
+    <section class="card" id="quickScouting">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">QUICK SCOUTING</p>
+          <h3>Top of the class</h3>
+        </div>
+        <label class="scouting-select">Metric
+          <select id="scoutingMetric"></select>
+        </label>
+      </div>
+      <p class="chart-note">Top five 2026–27 fourth/fifth-year prospects in the selected metric.</p>
+      <div class="quick-scout-list" id="quickScoutList"></div>
+    </section>
+
     <section class="card info-grid" id="methodology">
       <div><p class="eyebrow">METHODOLOGY</p><h3>How to read this</h3></div>
       <div class="info-copy">
@@ -104,6 +119,6 @@
 
     <footer><span>© 2026 Kyle Neuber</span><span>Data sourced from InStat</span></footer>
   </main>
-  <script src="./ncaa-app.js?v=46"></script>
+  <script src="./ncaa-app.js?v=47"></script>
 </body>
 </html>

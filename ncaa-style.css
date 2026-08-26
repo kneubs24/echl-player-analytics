@@ -239,3 +239,25 @@ footer{display:flex;justify-content:space-between;color:#71839b;font-size:12px;p
 .nhl-comp-block{margin-bottom:14px}
 .nhl-comp-label{font-size:12px;font-weight:900;letter-spacing:.12em;color:#58a6ff;margin:2px 0 8px 2px}
 .nhl-comp-card{border-color:#3f78a8;background:linear-gradient(180deg,rgba(49,104,150,.12),rgba(15,29,45,.35))}
+
+/* v47 — quick scouting / top-of-class panel */
+.scouting-select{min-width:210px;font-size:11px;font-weight:900;color:#91a4bc;display:flex;flex-direction:column;gap:7px}
+.quick-scout-list{display:grid;gap:8px;margin-top:14px}
+.quick-scout-row{
+  display:grid;
+  grid-template-columns:38px minmax(220px,1.5fr) minmax(100px,.65fr) minmax(100px,.65fr) minmax(85px,.55fr);
+  gap:12px;align-items:center;padding:11px 13px;border:1px solid #24354b;border-radius:10px;background:#0e1927
+}
+.quick-rank{width:30px;height:30px;display:grid;place-items:center;border-radius:8px;background:#17324e;color:#fff;font-weight:900}
+.quick-player strong{display:block;color:#f5f7fb}
+.quick-player span,.quick-value span,.quick-pct span{display:block;color:#8191a5;font-size:11px;margin-top:3px}
+.quick-value,.quick-pct{text-align:right}
+.quick-value strong,.quick-pct strong{font-size:18px;color:#fff}
+.quick-pct strong{color:#58a6ff}
+.quick-pct.secondary strong{color:#c4d4e7}
+@media(max-width:760px){
+  .section-head{align-items:stretch}
+  .scouting-select{min-width:0;width:100%;margin-top:10px}
+  .quick-scout-row{grid-template-columns:32px 1fr 80px}
+  .quick-pct{display:none}
+}
