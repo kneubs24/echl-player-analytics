@@ -240,37 +240,6 @@
         }
       },
       {
-        "player": "Gavin Brindley",
-        "ncaa_team": "Michigan",
-        "last_ncaa": "2023-24",
-        "pro_league": "AHL",
-        "pro_gp": 56,
-        "height": "5'9\"",
-        "weight": "168",
-        "ncaa_stats": [
-          {
-            "season": "2023-24",
-            "team": "Michigan",
-            "gp": 32,
-            "g": 22,
-            "a": 21,
-            "pts": 43,
-            "xg_pg": 0.42,
-            "shots_pg": 3.59
-          }
-        ],
-        "position": "F",
-        "recent_pro": {
-          "season": "2024-25",
-          "league": "AHL",
-          "team": "Cleveland",
-          "gp": 56,
-          "g": 6,
-          "a": 10,
-          "pts": 16
-        }
-      },
-      {
         "player": "Rutger McGroarty",
         "ncaa_team": "Michigan",
         "last_ncaa": "2023-24",
@@ -300,8 +269,80 @@
           "a": 23,
           "pts": 37
         }
+      },
+      {
+        "player": "Gavin Brindley",
+        "ncaa_team": "Michigan",
+        "last_ncaa": "2023-24",
+        "pro_league": "AHL",
+        "pro_gp": 56,
+        "height": "5'9\"",
+        "weight": "168",
+        "ncaa_stats": [
+          {
+            "season": "2023-24",
+            "team": "Michigan",
+            "gp": 32,
+            "g": 22,
+            "a": 21,
+            "pts": 43,
+            "xg_pg": 0.42,
+            "shots_pg": 3.59
+          }
+        ],
+        "position": "F",
+        "recent_pro": {
+          "season": "2024-25",
+          "league": "AHL",
+          "team": "Cleveland",
+          "gp": 56,
+          "g": 6,
+          "a": 10,
+          "pts": 16
+        }
       }
-    ]
+    ],
+    "nhl_comparable": {
+      "player": "Gavin Brindley",
+      "ncaa_team": "Michigan",
+      "last_ncaa": "2023-24",
+      "pro_league": "AHL",
+      "pro_gp": 56,
+      "height": "5'9\"",
+      "weight": "168",
+      "ncaa_stats": [
+        {
+          "season": "2023-24",
+          "team": "Michigan",
+          "gp": 32,
+          "g": 22,
+          "a": 21,
+          "pts": 43,
+          "xg_pg": 0.42,
+          "shots_pg": 3.59
+        }
+      ],
+      "position": "F",
+      "recent_pro": {
+        "season": "2024-25",
+        "league": "AHL",
+        "team": "Cleveland",
+        "gp": 56,
+        "g": 6,
+        "a": 10,
+        "pts": 16
+      },
+      "nhl_stats": {
+        "career_gp": 57,
+        "season": "2025-26",
+        "team": "Colorado",
+        "gp": 56,
+        "g": 6,
+        "a": 7,
+        "pts": 13
+      },
+      "nhl_career_gp": 57
+    }
   },
   "Kai Daniells|2003-03-07": {
     "player": "Kai Daniells",
@@ -4985,37 +5026,6 @@
     "season_points": 42,
     "comps": [
       {
-        "player": "Max Sasson",
-        "ncaa_team": "Western Michigan",
-        "last_ncaa": "2022-23",
-        "pro_league": "AHL",
-        "pro_gp": 126,
-        "height": "6'1\"",
-        "weight": "181",
-        "ncaa_stats": [
-          {
-            "season": "2022-23",
-            "team": "Western Michigan",
-            "gp": 37,
-            "g": 15,
-            "a": 26,
-            "pts": 41,
-            "xg_pg": 0.45,
-            "shots_pg": 2.73
-          }
-        ],
-        "position": "F",
-        "recent_pro": {
-          "season": "2024-25",
-          "league": "AHL",
-          "team": "Abbotsford",
-          "gp": 65,
-          "g": 18,
-          "a": 28,
-          "pts": 46
-        }
-      },
-      {
         "player": "Julian Napravnik",
         "ncaa_team": "Minnesota State",
         "last_ncaa": "2021-22",
@@ -5076,8 +5086,80 @@
           "a": 19,
           "pts": 37
         }
+      },
+      {
+        "player": "Max Sasson",
+        "ncaa_team": "Western Michigan",
+        "last_ncaa": "2022-23",
+        "pro_league": "AHL",
+        "pro_gp": 126,
+        "height": "6'1\"",
+        "weight": "181",
+        "ncaa_stats": [
+          {
+            "season": "2022-23",
+            "team": "Western Michigan",
+            "gp": 37,
+            "g": 15,
+            "a": 26,
+            "pts": 41,
+            "xg_pg": 0.45,
+            "shots_pg": 2.73
+          }
+        ],
+        "position": "F",
+        "recent_pro": {
+          "season": "2024-25",
+          "league": "AHL",
+          "team": "Abbotsford",
+          "gp": 65,
+          "g": 18,
+          "a": 28,
+          "pts": 46
+        }
       }
-    ]
+    ],
+    "nhl_comparable": {
+      "player": "Max Sasson",
+      "ncaa_team": "Western Michigan",
+      "last_ncaa": "2022-23",
+      "pro_league": "AHL",
+      "pro_gp": 126,
+      "height": "6'1\"",
+      "weight": "181",
+      "ncaa_stats": [
+        {
+          "season": "2022-23",
+          "team": "Western Michigan",
+          "gp": 37,
+          "g": 15,
+          "a": 26,
+          "pts": 41,
+          "xg_pg": 0.45,
+          "shots_pg": 2.73
+        }
+      ],
+      "position": "F",
+      "recent_pro": {
+        "season": "2024-25",
+        "league": "AHL",
+        "team": "Abbotsford",
+        "gp": 65,
+        "g": 18,
+        "a": 28,
+        "pts": 46
+      },
+      "nhl_stats": {
+        "career_gp": 95,
+        "season": "2025-26",
+        "team": "Vancouver",
+        "gp": 66,
+        "g": 13,
+        "a": 6,
+        "pts": 19
+      },
+      "nhl_career_gp": 95
+    }
   },
   "Brendan Gorman|2003-02-17": {
     "player": "Brendan Gorman",

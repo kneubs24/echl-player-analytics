@@ -51,11 +51,31 @@ function cyclePlayer(dir){
   $("player").value=PLAYER_INDEX[keys[i]].Player; render();
 }
 function rowsFor(k){return DATA.filter(r=>clean(r.player_key)===k);}
+
+function renderNhlComparable(c){
+  if(!c||!c.nhl_stats) return "";
+  const s=(c.ncaa_stats&&c.ncaa_stats.length)?c.ncaa_stats[0]:{};
+  const n=c.nhl_stats;
+  return `<div class="nhl-comp-block">
+    <div class="nhl-comp-label">NHL COMPARABLE</div>
+    <div class="comp-card nhl-comp-card">
+      <div class="comp-top">
+        <div class="comp-rank">★</div>
+        <div><div class="comp-name">${c.player}</div><div class="comp-sub">${c.position||""} · ${c.height||""} · ${c.weight||""} lbs</div></div>
+        <div class="comp-pro"><b>NHL</b><span>${n.career_gp} career GP</span></div>
+      </div>
+      <div class="comp-ncaa"><b>${s.season||c.last_ncaa} · ${s.team||c.ncaa_team}</b><span>${fmt(s.gp)} GP</span><span>${fmt(s.g)} G</span><span>${fmt(s.a)} A</span><span>${fmt(s.pts)} PTS</span><span>${fmt(s.xg_pg)} xG/G</span><span>${fmt(s.shots_pg)} SH/G</span></div>
+      <div class="recent-pro"><span class="tag">NHL</span><span>${n.season} · ${n.team}</span><b>${n.gp} GP</b><b>${n.g} G</b><b>${n.a} A</b><b>${n.pts} PTS</b></div>
+    </div>
+  </div>`;
+}
+
 function renderComps(k){
  const c=COMPS[k],list=$("compsList");
- if(!c||!c.comps||!c.comps.length){list.innerHTML=`<div class="no-comp"><strong>No strong professional comparable identified</strong><span>No sufficiently close historical pro match for this profile.</span></div>`;$("compNote").textContent="No forced match";return;}
+  const nhlCard=c&&c.nhl_comparable?renderNhlComparable(c.nhl_comparable):"";
+ if(!c||((!c.comps||!c.comps.length)&&!nhlCard)){list.innerHTML=`<div class="no-comp"><strong>No strong professional comparable identified</strong><span>No sufficiently close historical pro match for this profile.</span></div>`;$("compNote").textContent="No forced match";return;}
  $("compNote").textContent=`${c.comps.length} credible match${c.comps.length===1?"":"es"}`;
- list.innerHTML=c.comps.map((x,i)=>{
+ list.innerHTML=nhlCard+c.comps.map((x,i)=>{
   const s=(x.ncaa_stats||[])[0],p=x.recent_pro;
   const ncaa=s?`<div class="comp-stat-line"><span class="stat-season">${s.season} · ${s.team}</span><span><b>${s.gp}</b> GP</span><span><b>${s.g??"—"}</b> G</span><span><b>${s.a??"—"}</b> A</span><span><b>${s.pts??"—"}</b> PTS</span><span><b>${s.xg_pg??"—"}</b> xG/G</span><span><b>${s.shots_pg??"—"}</b> SH/G</span></div>`:"";
   const pro=p?`<div class="comp-pro-line"><span class="pro-label">Recent pro</span><span class="pro-league">${p.league}</span><span>${p.season}${p.team?` · ${p.team}`:""}</span><span><b>${p.gp}</b> GP</span><span><b>${p.g??"—"}</b> G</span><span><b>${p.a??"—"}</b> A</span><span><b>${p.pts??"—"}</b> PTS</span></div>`:`<div class="comp-pro-line muted">No 30+ GP pro season in dataset</div>`;
@@ -144,8 +164,8 @@ $("player").addEventListener("keydown",e=>{
 $("player").addEventListener("change",resolve);
 
 Promise.all([
-  fetch("./ncaa_final_year_report.csv?v=44").then(r=>{if(!r.ok)throw new Error("report");return r.text();}),
-  fetch("./ncaa_final_year_comps.json?v=44").then(r=>{if(!r.ok)throw new Error("comps");return r.json();})
+  fetch("./ncaa_final_year_report.csv?v=46").then(r=>{if(!r.ok)throw new Error("report");return r.text();}),
+  fetch("./ncaa_final_year_comps.json?v=46").then(r=>{if(!r.ok)throw new Error("comps");return r.json();})
 ]).then(([text,comps])=>{
   DATA=Papa.parse(text,{header:true,skipEmptyLines:true}).data;
   COMPS=comps; buildIndex(); refreshTeams(); refreshPlayers();

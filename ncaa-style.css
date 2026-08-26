@@ -234,3 +234,8 @@ footer{display:flex;justify-content:space-between;color:#71839b;font-size:12px;p
 
 /* v42 wider analytics table */
 .table-wrap{overflow-x:auto}.table-wrap table{min-width:1050px}
+
+/* v45 NHL comparable — intentionally rare */
+.nhl-comp-block{margin-bottom:14px}
+.nhl-comp-label{font-size:12px;font-weight:900;letter-spacing:.12em;color:#58a6ff;margin:2px 0 8px 2px}
+.nhl-comp-card{border-color:#3f78a8;background:linear-gradient(180deg,rgba(49,104,150,.12),rgba(15,29,45,.35))}
