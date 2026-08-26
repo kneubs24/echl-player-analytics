@@ -92,6 +92,35 @@ function renderTable(rows){
     return `<tr><td>${r.Category}</td><td>${r.Metric}</td><td>${fmt(r["Per-game value"])}</td><td>${fmt(r["NCAA Avg"])}</td><td><span class="pct-pill ${p<50?"low":""}">${p}%</span></td></tr>`;
   }).join("");
 }
+
+function countryFlag(nationality){
+  const n=clean(nationality).toLowerCase();
+  const map={
+    "usa":"🇺🇸","united states":"🇺🇸","american":"🇺🇸",
+    "canada":"🇨🇦","canadian":"🇨🇦",
+    "sweden":"🇸🇪","swedish":"🇸🇪",
+    "finland":"🇫🇮","finnish":"🇫🇮",
+    "norway":"🇳🇴","norwegian":"🇳🇴",
+    "denmark":"🇩🇰","danish":"🇩🇰",
+    "germany":"🇩🇪","german":"🇩🇪",
+    "czech republic":"🇨🇿","czechia":"🇨🇿","czech":"🇨🇿",
+    "slovakia":"🇸🇰","slovak":"🇸🇰",
+    "switzerland":"🇨🇭","swiss":"🇨🇭",
+    "russia":"🇷🇺","russian":"🇷🇺",
+    "latvia":"🇱🇻","latvian":"🇱🇻",
+    "austria":"🇦🇹","austrian":"🇦🇹",
+    "france":"🇫🇷","french":"🇫🇷",
+    "united kingdom":"🇬🇧","england":"🇬🇧","british":"🇬🇧"
+  };
+  return map[n]||"";
+}
+function handLabel(v){
+  const h=clean(v).toLowerCase();
+  if(h==="r"||h==="right") return "Shoots R";
+  if(h==="l"||h==="left") return "Shoots L";
+  return h ? `Shoots ${clean(v)}` : "";
+}
+
 function render(){
   const k=currentKey(); if(!k)return;
   const rows=rowsFor(k); if(!rows.length)return;
@@ -99,6 +128,14 @@ function render(){
   $("player").value=r.Player;
   $("playerName").textContent=r.Player;
   $("playerMeta").textContent=`${r.Position} · ${r.Team}`;
+  const detailParts=[];
+  const flag=countryFlag(r.Nationality);
+  if(clean(r.Nationality) && clean(r.Nationality)!=="[object Object]") detailParts.push(`<span class="detail-chip country-chip">${flag} ${clean(r.Nationality)}</span>`);
+  if(clean(r["Height Display"])) detailParts.push(`<span class="detail-chip">${clean(r["Height Display"])}</span>`);
+  if(clean(r["Weight Display"])) detailParts.push(`<span class="detail-chip">${clean(r["Weight Display"])} lbs</span>`);
+  const hand=handLabel(r["Active hand"]);
+  if(hand) detailParts.push(`<span class="detail-chip">${hand}</span>`);
+  $("playerDetails").innerHTML=detailParts.join("");
   $("yearBadge").textContent=`Entering NCAA Year ${Math.round(num(r["Entering NCAA Season"])||0)}`;
   $("gp").textContent=Math.round(num(r["Season GP"])||0);
   $("pts").textContent=Math.round(num(r["Season Points"])||0);
@@ -119,8 +156,8 @@ $("player").addEventListener("keydown",e=>{
 $("player").addEventListener("change",resolve);
 
 Promise.all([
-  fetch("./ncaa_final_year_report.csv?v=33").then(r=>{if(!r.ok)throw new Error("report");return r.text();}),
-  fetch("./ncaa_final_year_comps.json?v=33").then(r=>{if(!r.ok)throw new Error("comps");return r.json();})
+  fetch("./ncaa_final_year_report.csv?v=36").then(r=>{if(!r.ok)throw new Error("report");return r.text();}),
+  fetch("./ncaa_final_year_comps.json?v=36").then(r=>{if(!r.ok)throw new Error("comps");return r.json();})
 ]).then(([text,comps])=>{
   DATA=Papa.parse(text,{header:true,skipEmptyLines:true}).data;
   COMPS=comps; buildIndex(); refreshTeams(); refreshPlayers();

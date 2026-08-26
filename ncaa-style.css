@@ -155,3 +155,8 @@ footer{display:flex;justify-content:space-between;color:#71839b;font-size:12px;p
  #profileSnapshot{grid-template-columns:1fr 1fr !important}
  .comp-main{grid-template-columns:30px 1fr}.comp-outcome{grid-column:2;text-align:left}
 }
+
+/* v35 quick-profile biographical details */
+.player-details{display:flex;flex-wrap:wrap;gap:7px;margin:9px 0 2px}
+.detail-chip{display:inline-flex;align-items:center;min-height:27px;padding:5px 9px;border:1px solid #28415e;border-radius:999px;background:#0b1625;color:#dbe6f4;font-size:12px;font-weight:750}
+.country-chip{gap:4px}
