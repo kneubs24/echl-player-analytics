@@ -142,7 +142,8 @@ function populateScoutingMetrics(){
 
 function renderQuickScouting(){
   const metricName=$("scoutingMetric").value;
-  const rows=DATA.filter(r=>clean(r.Metric)===metricName);
+  const position=$("scoutingPosition").value;
+  const rows=DATA.filter(r=>clean(r.Metric)===metricName && clean(r.Position)===position);
   const onePerPlayer=new Map();
 
   rows.forEach(r=>{
@@ -221,10 +222,11 @@ $("player").addEventListener("keydown",e=>{
 $("player").addEventListener("change",resolve);
 
 $("scoutingMetric").addEventListener("change",renderQuickScouting);
+$("scoutingPosition").addEventListener("change",renderQuickScouting);
 
 Promise.all([
-  fetch("./ncaa_final_year_report.csv?v=48").then(r=>{if(!r.ok)throw new Error("report");return r.text();}),
-  fetch("./ncaa_final_year_comps.json?v=48").then(r=>{if(!r.ok)throw new Error("comps");return r.json();})
+  fetch("./ncaa_final_year_report.csv?v=49").then(r=>{if(!r.ok)throw new Error("report");return r.text();}),
+  fetch("./ncaa_final_year_comps.json?v=49").then(r=>{if(!r.ok)throw new Error("comps");return r.json();})
 ]).then(([text,comps])=>{
   DATA=Papa.parse(text,{header:true,skipEmptyLines:true}).data;
   COMPS=comps; buildIndex(); refreshTeams(); refreshPlayers(); populateScoutingMetrics(); renderQuickScouting();

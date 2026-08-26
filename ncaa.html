@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="2026-27 NCAA fourth- and fifth-year prospect analytics with historical professional comparables.">
   <title>NCAA Final-Year Prospects</title>
-  <link rel="stylesheet" href="./ncaa-style.css?v=48">
+  <link rel="stylesheet" href="./ncaa-style.css?v=49">
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
@@ -109,15 +109,23 @@
           <p class="eyebrow">QUICK SCOUTING</p>
           <h3>Top of the class</h3>
         </div>
-        <label class="scouting-select">Metric
-          <select id="scoutingMetric"></select>
-        </label>
+        <div class="scouting-controls">
+          <label class="scouting-select">Position
+            <select id="scoutingPosition">
+              <option value="F">Forwards</option>
+              <option value="D">Defensemen</option>
+            </select>
+          </label>
+          <label class="scouting-select">Metric
+            <select id="scoutingMetric"></select>
+          </label>
+        </div>
       </div>
-      <p class="chart-note">Top five 2026–27 fourth/fifth-year prospects in the selected metric.</p>
+      <p class="chart-note">Top five 2026–27 fourth/fifth-year prospects at the selected position and metric.</p>
       <div class="quick-scout-list" id="quickScoutList"></div>
     </section>
 
   </main>
-  <script src="./ncaa-app.js?v=48"></script>
+  <script src="./ncaa-app.js?v=49"></script>
 </body>
 </html>
